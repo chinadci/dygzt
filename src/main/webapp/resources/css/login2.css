@@ -1,0 +1,105 @@
+body {
+	margin: 0px;
+	background-color:#02284F;
+}
+.container{
+	text-align: center;
+}
+.content-wrapper {
+	margin:0 auto;
+	width: 1200px;
+	height: 781px;
+}
+
+.bg-img {
+	background:url(img/bbsc_bg_login.png);
+	position: absolute;
+	width: 1200px;
+	height: 781px;
+	z-index: -1;
+}
+@media screen and (min-width: 1281px){
+	.login-form form{
+		right: 264px;
+	}
+}
+
+@media screen and (min-width: 1153px) and (max-width: 1280px){
+	.login-form form{
+		right: 230px;
+	}
+}
+
+@media screen and (min-width: 1025px) and (max-width: 1152px){
+	.login-form form{
+		right: 134px;
+	}
+}
+
+@media screen and (min-width: 801px) and (max-width: 1024px) {
+	.login-form form{
+		right: -5px;
+	}
+}
+
+@media screen and (max-width: 800px) {
+	.login-form form{
+		right: -216px;
+	}
+}
+.login-form form {
+	position: absolute;
+	top: 292px;
+	font-size: 14px;
+}
+
+.login-form div {
+	margin-bottom: 16px;
+	margin-top: 0px;
+}
+
+.login-form form label {
+	width: 77px;
+	float: left;
+	margin-top: 6px;
+	color:#02284F;
+	font-weight:bold;
+}
+
+.login-form form input[name='fym'], .login-form form input[name='yhm'],
+	.login-form form input[name='mm'] {
+	background: url("img/bg_input.png") !important;
+	background-repeat : no-repeat !important;
+	width: 199px;
+	border: 0px;
+	font-size: 14px;
+	padding: 7px 5px 8px 5px;
+}
+.rem-msg-div {
+	width: 300px;
+	text-align:left;
+}
+
+.rem-div {
+	margin-left: 86px;
+}
+.msg-div {
+	margin-left: 20px;
+	color: firebrick;
+}
+
+.button-div {
+	text-align:center;
+}
+
+.submit-button {
+	border:0;
+	background: url("img/login_button.png") no-repeat;
+	width: 152px;
+	height: 27px;
+}
+
+#login-form label{
+    text-align:justify;
+	text-align-last: justify; //文字两端居中
+}

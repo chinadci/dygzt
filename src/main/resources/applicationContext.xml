@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:ehcache="http://ehcache-spring-annotations.googlecode.com/svn/schema/ehcache-spring"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd   
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.1.xsd   
+       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.1.xsd   
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd     
+       http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+       http://ehcache-spring-annotations.googlecode.com/svn/schema/ehcache-spring
+     http://ehcache-spring-annotations.googlecode.com/svn/schema/ehcache-spring/ehcache-spring-1.1.xsd"
+
+	default-lazy-init="true" default-autowire="byName"
+	xmlns:util="http://www.springframework.org/schema/util">
+	<bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>jdbc.properties</value>
+			</list>
+		</property>
+	</bean>
+	<bean id="dataSource" class="software.dygzt.dynamicds.DynamicDataSource">
+		<property name="targetDataSources">
+			<map key-type="java.lang.String">
+				<entry key="Default" value-ref="currentDataSource" />
+				<entry key="Tjgyxfk" value-ref="xfkDataSource" />
+				<entry key="Tjgyjzk" value-ref="jzkDataSource" />
+				<entry key="Tjyzy" value-ref="tjyzyDataSource" />
+				<entry key="Tjgy" value-ref="tjgyDataSource" />
+				<entry key="Tjezy" value-ref="tjezyDataSource" />
+				<entry key="Tjhpfy" value-ref="tjhpfyDataSource" />
+				<entry key="Tjnkfy" value-ref="tjnkfyDataSource" />
+				<entry key="Tjhbfy" value-ref="tjhbfyDataSource" />
+				<entry key="Tjhqfy" value-ref="tjhqfyDataSource" />
+				<entry key="Tjxqfy" value-ref="tjxqfyDataSource" />
+				<entry key="Tjbcfy" value-ref="tjbcfyDataSource" />
+				<entry key="Tjhdfy" value-ref="tjhdfyDataSource" />
+				<entry key="Tjhxfy" value-ref="tjhxfyDataSource" />
+				<entry key="Tjtgfy" value-ref="tjtgfyDataSource" />
+				<entry key="Tjhgfy" value-ref="tjhgfyDataSource" />
+				<entry key="Tjdgfy" value-ref="tjdgfyDataSource" />
+				<entry key="Tjdlfy" value-ref="tjdlfyDataSource" />
+				<entry key="Tjjnfy" value-ref="tjjnfyDataSource" />
+				<entry key="Tjnhfy" value-ref="tjnhfyDataSource" />
+				<entry key="Tjwqfy" value-ref="tjwqfyDataSource" />
+				<entry key="Tjjhfy" value-ref="tjjhfyDataSource" />
+				<entry key="Tjbdfy" value-ref="tjbdfyDataSource" />
+				<entry key="Tjjxfy" value-ref="tjjxfyDataSource" />
+				<entry key="Tjkfqfy" value-ref="tjkfqfyDataSource" />
+				<entry key="Tjhsfy" value-ref="tjhsfyDataSource" />
+				<entry key="Tjbhxqfy" value-ref="tjbhxqfyDataSource" />
+				<entry key="Tjtlfy" value-ref="tjtlfyDataSource" />
+				<entry key="Fyrs" value-ref="fyrsDataSource" />
+				<entry key="Tjgysftj" value-ref="sftjDataSource" />
+				<entry key="Yzjcjzk" value-ref="yzjcjzkDataSource" />
+			</map>
+		</property>
+		<property name="defaultTargetDataSource" ref="currentDataSource" />
+	</bean>
+
+	<bean id="parentDataSource"
+		class="software.dygzt.dynamicds.EncryptDataSource">
+		<property name="driverClassName" value="${jdbc.driverName}" />
+	</bean>
+	
+	<!-- currentDataSource -->
+	<bean id="currentDataSource" parent="parentDataSource">
+		<property name="url" value="${jdbc.url}" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+		
+		<property name="initialSize"  value="10"></property>
+		<property name="maxIdle" value="10"/>  
+		<!--minIdle: 最小空闲连接-->  
+		<property name="minIdle" value="5"/>  
+		<!--maxActive: 最大连接数量-->  
+		<property name="maxActive" value="30"/>  
+		<!--removeAbandoned: 是否自动回收超时连接-->  
+		<property name="removeAbandoned" value="true"/>  
+		<!--removeAbandonedTimeout: 超时时间(以秒数为单位)-->  
+		<property name="removeAbandonedTimeout" value="180"/>  
+	</bean>
+	
+	<bean id="xfkDataSource" parent="parentDataSource">
+		<property name="url" value="${jdbc.url.xfk}" />
+		<property name="username" value="${jdbc.username.xfk}" />
+		<property name="password" value="${jdbc.password.xfk}" />
+	</bean>
+	
+	<!-- 天津高院集中库 DataSource -->
+	<bean id="jzkDataSource" parent="parentDataSource">
+		<property name="url" value="${jdbc.url.jzk}" />
+		<property name="username" value="${jdbc.username.jzk}" />
+		<property name="password" value="${jdbc.password.jzk}" />
+	</bean>
+
+	<!-- 天津高院DataSource -->
+	<bean id="tjgyDataSource" parent="parentDataSource">
+		<property name="url" value="${jdbc.url.tjgy}" />
+		<property name="username" value="${jdbc.username.tjgy}" />
+		<property name="password" value="${jdbc.password.tjgy}" />
+	</bean>
+
+	<!-- 一中院DataSource -->
+	<bean id="tjyzyDataSource" parent="parentDataSource">
+		<property name="url" value="${jdbc.url.tjyzy}" />
+		<property name="username" value="${jdbc.username.tjyzy}" />
+		<property name="password" value="${jdbc.password.tjyzy}" />
+	</bean>
+
+	<!-- 二中院DataSource -->
+	<bean id="tjezyDataSource" parent="parentDataSource">
+		<property name="url" value="${jdbc.url.tjezy}" />
+		<property name="username" value="${jdbc.username.tjezy}" />
+		<property name="password" value="${jdbc.password.tjezy}" />
+	</bean>
+
+	<!-- 海事DataSource -->
+	<bean id="tjhsfyDataSource" parent="parentDataSource">
+		<property name="url" value="${jdbc.url.tjhsfy}" />
+		<property name="username" value="${jdbc.username.tjhsfy}" />
+		<property name="password" value="${jdbc.password.tjhsfy}" />
+	</bean>
+
+	<!-- 和平区法院DataSource -->
+	<bean id="tjhpfyDataSource" parent="parentDataSource">
+		<property name="url" value="${jdbc.url.tjhpfy}" />
+		<property name="username" value="${jdbc.username.tjhpfy}" />
+		<property name="password" value="${jdbc.password.tjhpfy}" />
+	</bean>
+
+	<!-- 南开区法院DataSource -->
+	<bean id="tjnkfyDataSource" parent="parentDataSource">
+		<property name="url" value="${jdbc.url.tjnkfy}" />
+		<property name="username" value="${jdbc.username.tjnkfy}" />
+		<property name="password" value="${jdbc.password.tjnkfy}" />
+	</bean>
+
+	<!-- 河北区法院DataSource -->
+	<bean id="tjhbfyDataSource" parent="parentDataSource">
+		<property name="url" value="${jdbc.url.tjhbfy}" />
+		<property name="username" value="${jdbc.username.tjhbfy}" />
+		<property name="password" value="${jdbc.password.tjhbfy}" />
+	</bean>
+
+	<!-- 红桥区法院DataSource -->
+	<bean id="tjhqfyDataSource" parent="parentDataSource">
+		<property name="url" value="${jdbc.url.tjhqfy}" />
+		<property name="username" value="${jdbc.username.tjhqfy}" />
+		<property name="password" value="${jdbc.password.tjhqfy}" />
+	</bean>
+
+	<!-- 西青区法院DataSource -->
+	<bean id="tjxqfyDataSource" parent="parentDataSource">
+		<property name="url" value="${jdbc.url.tjxqfy}" />
+		<property name="username" value="${jdbc.username.tjxqfy}" />
+		<property name="password" value="${jdbc.password.tjxqfy}" />
+	</bean>
+
+	<!-- 北辰区法院DataSource -->
+	<bean id="tjbcfyDataSource" parent="parentDataSource">
+		<property name="url" value="${jdbc.url.tjbcfy}" />
+		<property name="username" value="${jdbc.username.tjbcfy}" />
+		<property name="password" value="${jdbc.password.tjbcfy}" />
+	</bean>
+
+	<!-- 河东区法院DataSource -->
+	<bean id="tjhdfyDataSource" parent="parentDataSource">
+		<property name="url" value="${jdbc.url.tjhdfy}" />
+		<property name="username" value="${jdbc.username.tjhdfy}" />
+		<property name="password" value="${jdbc.password.tjhdfy}" />
+	</bean>
+
+	<!-- 河西区法院DataSource -->
+	<bean id="tjhxfyDataSource" parent="parentDataSource">
+		<property name="url" value="${jdbc.url.tjhxfy}" />
+		<property name="username" value="${jdbc.username.tjhxfy}" />
+		<property name="password" value="${jdbc.password.tjhxfy}" />
+	</bean>
+
+	<!-- 塘沽区法院DataSource -->
+	<bean id="tjtgfyDataSource" parent="parentDataSource">
+		<property name="url" value="${jdbc.url.tjtgfy}" />
+		<property name="username" value="${jdbc.username.tjtgfy}" />
+		<property name="password" value="${jdbc.password.tjtgfy}" />
+	</bean>
+
+	<!-- 汉沽区法院DataSource -->
+	<bean id="tjhgfyDataSource" parent="parentDataSource">
+		<property name="url" value="${jdbc.url.tjhgfy}" />
+		<property name="username" value="${jdbc.username.tjhgfy}" />
+		<property name="password" value="${jdbc.password.tjhgfy}" />
+	</bean>
+
+	<!-- 大港区法院DataSource -->
+	<bean id="tjdgfyDataSource" parent="parentDataSource">
+		<property name="url" value="${jdbc.url.tjdgfy}" />
+		<property name="username" value="${jdbc.username.tjdgfy}" />
+		<property name="password" value="${jdbc.password.tjdgfy}" />
+	</bean>
+
+	<!-- 东丽区法院DataSource -->
+	<bean id="tjdlfyDataSource" parent="parentDataSource">
+		<property name="url" value="${jdbc.url.tjdlfy}" />
+		<property name="username" value="${jdbc.username.tjdlfy}" />
+		<property name="password" value="${jdbc.password.tjdlfy}" />
+	</bean>
+
+	<!-- 津南区法院DataSource -->
+	<bean id="tjjnfyDataSource" parent="parentDataSource">
+		<property name="url" value="${jdbc.url.tjjnfy}" />
+		<property name="username" value="${jdbc.username.tjjnfy}" />
+		<property name="password" value="${jdbc.password.tjjnfy}" />
+	</bean>
+
+	<!-- 宁河县法院DataSource -->
+	<bean id="tjnhfyDataSource" parent="parentDataSource">
+		<property name="url" value="${jdbc.url.tjnhfy}" />
+		<property name="username" value="${jdbc.username.tjnhfy}" />
+		<property name="password" value="${jdbc.password.tjnhfy}" />
+	</bean>
+
+	<!-- 武清县法院DataSource -->
+	<bean id="tjwqfyDataSource" parent="parentDataSource">
+		<property name="url" value="${jdbc.url.tjwqfy}" />
+		<property name="username" value="${jdbc.username.tjwqfy}" />
+		<property name="password" value="${jdbc.password.tjwqfy}" />
+	</bean>
+
+	<!-- 静海县法院DataSource -->
+	<bean id="tjjhfyDataSource" parent="parentDataSource">
+		<property name="url" value="${jdbc.url.tjjhfy}" />
+		<property name="username" value="${jdbc.username.tjjhfy}" />
+		<property name="password" value="${jdbc.password.tjjhfy}" />
+	</bean>
+
+	<!-- 宝坻县法院DataSource -->
+	<bean id="tjbdfyDataSource" parent="parentDataSource">
+		<property name="url" value="${jdbc.url.tjbdfy}" />
+		<property name="username" value="${jdbc.username.tjbdfy}" />
+		<property name="password" value="${jdbc.password.tjbdfy}" />
+	</bean>
+
+	<!-- 蓟县县法院DataSource -->
+	<bean id="tjjxfyDataSource" parent="parentDataSource">
+		<property name="url" value="${jdbc.url.tjjxfy}" />
+		<property name="username" value="${jdbc.username.tjjxfy}" />
+		<property name="password" value="${jdbc.password.tjjxfy}" />
+	</bean>
+
+	<!-- 开发区法院DataSource -->
+	<bean id="tjkfqfyDataSource" parent="parentDataSource">
+		<property name="url" value="${jdbc.url.tjkfqfy}" />
+		<property name="username" value="${jdbc.username.tjkfqfy}" />
+		<property name="password" value="${jdbc.password.tjkfqfy}" />
+	</bean>
+
+	<!-- 滨海新区法院DataSource -->
+	<bean id="tjbhxqfyDataSource" parent="parentDataSource">
+		<property name="url" value="${jdbc.url.tjbhxqfy}" />
+		<property name="username" value="${jdbc.username.tjbhxqfy}" />
+		<property name="password" value="${jdbc.password.tjbhxqfy}" />
+	</bean>
+
+	<!-- 天津铁路法院DataSource -->
+	<bean id="tjtlfyDataSource" parent="parentDataSource">
+		<property name="url" value="${jdbc.url.tjtlfy}" />
+		<property name="username" value="${jdbc.username.tjtlfy}" />
+		<property name="password" value="${jdbc.password.tjtlfy}" />
+	</bean>
+	
+	<!-- 天津人事系统DataSource -->
+	<bean id="fyrsDataSource" parent="parentDataSource">
+		<property name="url" value="${jdbc.url.fyrs}" />
+		<property name="username" value="${jdbc.username.fyrs}" />
+		<property name="password" value="${jdbc.password.fyrs}" />
+	</bean>
+	
+	<bean id="sftjDataSource" parent="parentDataSource">
+		<property name="url" value="${jdbc.url.sftj}" />
+		<property name="username" value="${jdbc.username.sftj}" />
+		<property name="password" value="${jdbc.password.sftj}" />
+	</bean>
+	
+	<!-- 天津高院院长决策集中库 DataSource -->
+	<bean id="yzjcjzkDataSource" parent="parentDataSource">
+		<property name="url" value="${jdbc.url.yzjcjzk}" />
+		<property name="username" value="${jdbc.username.yzjcjzk}" />
+		<property name="password" value="${jdbc.password.yzjcjzk}" />
+	</bean>
+
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="hibernateProperties">
+			<value> hibernate.dialect=${hibernate.dialect}
+				hibernate.query.substitutions=true
+				hibernate.show_sql=true
+				hibernate.hbm2ddl.auto=none </value>
+		</property>
+		<property name="annotatedClasses">
+			<list>
+				<!-- DO -->
+				<value>software.dygzt.data.aj.dataobject.AjjbDO</value>
+				<value>software.dygzt.data.dmb.dataobject.DmbDO</value>
+				<value>software.dygzt.data.ajlx.dataobject.AjlxbDO</value>
+				<value>software.dygzt.data.user.dataobject.DyXtyhDO</value>
+				<value>software.dygzt.data.user.dataobject.XtglYhbDO</value>
+				<value>software.dygzt.data.research.dataobject.ResearchXXZBDO</value>
+				<value>software.dygzt.data.research.dataobject.ResearchXXBDO</value>
+				<value>software.dygzt.data.research.dataobject.ResearchTableDefDO</value>
+				<value>software.dygzt.data.research.dataobject.ResearchSavedInfoDO</value>
+				<value>software.dygzt.data.research.dataobject.ResearchCellDO</value>
+				<value>software.dygzt.data.research.dataobject.ResearchTableDO</value>
+				<value>software.dygzt.data.manual.dataobject.ManualResearchDO</value>
+				<value>software.dygzt.data.ay.dataobject.AydmbDO</value>
+			</list>
+		</property>
+	</bean>
+	
+	<mvc:annotation-driven />	
+	<context:component-scan base-package="software.dygzt" />
+	
+	<!-- 缓存 -->
+	<ehcache:annotation-driven cache-manager="ehCacheManager" />
+	<bean id="ehCacheManager"
+		class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean" />
+
+	<!-- 定义本地化处理器 基于session -->
+	<bean id="localeResolver"
+		class="org.springframework.web.servlet.i18n.SessionLocaleResolver" />
+
+	<!-- 事务处理 -->
+	<tx:annotation-driven transaction-manager="transactionManager" />
+	<bean id="transactionManager"
+		class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	
+	<!-- 文件上传 -->
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<!-- 设置文件长传最大 -->
+		<property name="maxUploadSize">
+			<value>-1</value>
+		</property>
+	</bean>
+	
+</beans>
+

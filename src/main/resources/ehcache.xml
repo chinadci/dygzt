@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="http://ehcache.org/ehcache.xsd"
+	updateCheck="false">
+
+
+	<diskStore path="java.io.tmpdir/EhCacheSpringAnnotationsExampleApp" />
+
+	<defaultCache eternal="false" maxElementsInMemory="1000"
+		overflowToDisk="false" diskPersistent="false" timeToIdleSeconds="0"
+		timeToLiveSeconds="300" memoryStoreEvictionPolicy="LRU" />
+
+	<!-- 用户相关cache -->
+	<cache name="YH_CACHE" eternal="false" maxElementsInMemory="1000"
+		overflowToDisk="false" diskPersistent="false" timeToIdleSeconds="0"
+		timeToLiveSeconds="300" memoryStoreEvictionPolicy="LRU" />
+
+	<!-- 代码表相关cache -->
+	<cache name="DMB_CACHE" eternal="false" maxElementsInMemory="1000"
+		overflowToDisk="false" diskPersistent="false" timeToIdleSeconds="0"
+		timeToLiveSeconds="300" memoryStoreEvictionPolicy="LRU" />
+		
+	<!-- 法院相关cache -->
+	<cache name="FY_CACHE" eternal="false" maxElementsInMemory="1000"
+		overflowToDisk="false" diskPersistent="false" timeToIdleSeconds="0"
+		timeToLiveSeconds="300" memoryStoreEvictionPolicy="LRU" />
+	
+	<!-- 部门相关cache -->
+	<cache name="BM_CACHE" eternal="false" maxElementsInMemory="1000"
+		overflowToDisk="false" diskPersistent="false" timeToIdleSeconds="0"
+		timeToLiveSeconds="300" memoryStoreEvictionPolicy="LRU" />
+		
+	<!-- 案件类型相关cache -->
+	<cache name="AJLX_CACHE" eternal="false" maxElementsInMemory="1000"
+		overflowToDisk="false" diskPersistent="false" timeToIdleSeconds="0"
+		timeToLiveSeconds="300" memoryStoreEvictionPolicy="LRU" />
+	<!-- 调研表历史相关cache -->
+	<cache name="MANAUL_DYR_CACHE" eternal="false" maxElementsInMemory="1000"
+		overflowToDisk="false" diskPersistent="false" timeToIdleSeconds="0"
+		timeToLiveSeconds="300" memoryStoreEvictionPolicy="LRU" />
+		
+	<cache name="MANAUL_SPR_CACHE" eternal="false" maxElementsInMemory="1000"
+		overflowToDisk="false" diskPersistent="false" timeToIdleSeconds="0"
+		timeToLiveSeconds="300" memoryStoreEvictionPolicy="LRU" />
+		
+	<cache name="MANAUL_JSR_CACHE" eternal="false" maxElementsInMemory="1000"
+		overflowToDisk="false" diskPersistent="false" timeToIdleSeconds="0"
+		timeToLiveSeconds="300" memoryStoreEvictionPolicy="LRU" />
+		
+	<cache name="MANAUL_SEARCH_CACHE" eternal="false" maxElementsInMemory="1000"
+		overflowToDisk="false" diskPersistent="false" timeToIdleSeconds="0"
+		timeToLiveSeconds="300" memoryStoreEvictionPolicy="LRU" />
+	
+	<!-- 自助调研相关cache -->	
+	<cache name="AUTO_CACHE" eternal="false" maxElementsInMemory="1000"
+		overflowToDisk="false" diskPersistent="false" timeToIdleSeconds="0"
+		timeToLiveSeconds="300" memoryStoreEvictionPolicy="LRU" />
+		
+	<cache name="AUTO_AJ_CACHE" eternal="false" maxElementsInMemory="1000"
+		overflowToDisk="false" diskPersistent="false" timeToIdleSeconds="0"
+		timeToLiveSeconds="300" memoryStoreEvictionPolicy="LRU" />
+		
+	<cache name="AUTO_TABLE_CACHE" eternal="false" maxElementsInMemory="1000"
+		overflowToDisk="false" diskPersistent="false" timeToIdleSeconds="0"
+		timeToLiveSeconds="300" memoryStoreEvictionPolicy="LRU" />
+		
+	<cache name="AUTO_SEARCH_CACHE" eternal="false" maxElementsInMemory="1000"
+		overflowToDisk="false" diskPersistent="false" timeToIdleSeconds="0"
+		timeToLiveSeconds="300" memoryStoreEvictionPolicy="LRU" />
+	
+	<!-- 报表生成相关cache -->	
+	<cache name="BBSC_TEMPLATE_CACHE" eternal="false" maxElementsInMemory="1000"
+		overflowToDisk="false" diskPersistent="false" timeToIdleSeconds="0"
+		timeToLiveSeconds="300" memoryStoreEvictionPolicy="LRU" />
+</ehcache>
