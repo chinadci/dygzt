@@ -170,7 +170,19 @@ s.ok {
 	font-size:14px;
 }
 .form4 .formrow{
-	border-bottom: 2px dashed #FFFFFF;
+	border-bottom: 1px dashed #FFFFFF;
+}
+
+.toggle-btn{
+	background: #f6f6f6;
+	border: 1px solid #e8e8e8;
+	color: #6b6b6b;
+	cursor: pointer;
+	float: right;
+	height: 24px;
+	line-height: 23px;
+	margin: -11px 16px 0 4px;
+	padding: 4px 18px;
 }
 .form4 .row-head{
 	display:inline-block;

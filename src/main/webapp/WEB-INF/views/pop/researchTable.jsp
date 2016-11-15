@@ -14,15 +14,15 @@
     <table id="dytable" class="center">
         <%--collevel参数代表列的--%>
         <thead>
-        <c:forEach var="i" begin="0" end="${table.collevel-1 }" step="1">
-            <tr>
-                <c:forEach items="${table.valueList.get(i)}" var="cell">
-                    <th rowspan="${cell.rowspan}" colspan="${cell.colspan}">
-                            ${cell.value}
-                    </th>
-                </c:forEach>
-            </tr>
-        </c:forEach>
+            <c:forEach var="i" begin="0" end="${table.collevel-1 }" step="1">
+                <tr>
+                    <c:forEach items="${table.valueList.get(i)}" var="cell">
+                        <th rowspan="${cell.rowspan}" colspan="${cell.colspan}">
+                                ${cell.value}
+                        </th>
+                    </c:forEach>
+                </tr>
+            </c:forEach>
         </thead>
 
         <tbody>

@@ -40,6 +40,13 @@ $(function(){
 	    $("#show-items").sortable({delay: 200}
 	    );
 	});
+
+	$(function () {
+		$("#toggle-btn").click(
+			function(){
+				$("#expend-list").toggle();
+			});
+	});
 	
 	//二级菜单面板打开的关闭
 	$(".ejl-list a").click(function(){
