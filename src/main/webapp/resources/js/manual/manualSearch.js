@@ -38,7 +38,8 @@ function initTable2(){
 		"bInfo" : true,	//页脚信息
 		"paging":true,	//分页
 		"pagingType": "full_numbers",
-		"pageLength": Math.floor(tableHeight/($("th").outerHeight()+5)),
+		// "pageLength": Math.floor(tableHeight/($("th").outerHeight()+5)),
+		"pageLength":15,
 		"bFilter": false,	//搜索
 		"language": {
 			 "emptyTable": "无",

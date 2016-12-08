@@ -8,7 +8,7 @@ $(function(){
 		window.open($(this).data("url"));
 	});
 	
-	//删除
+	//删除生成历史函数
 	$(document).on("click",".cpt_menu_del",function(){
 		var td = $(this).parent();
 		var btns = td.html();
@@ -32,6 +32,8 @@ $(function(){
 	});
 	
 });
+
+//初始化日期函数
 function initDate() {
 	var now = new Date();
 	var end_date = now.getFullYear()+"-"+(now.getMonth()+1)+"-"+now.getDate();
@@ -42,6 +44,8 @@ function initDate() {
 	$("#ksrq").val(begin_date);
 	$("#jsrq").val(end_date);
 }
+
+//初始化表格
 function initTable(){
 	var tableHeight= $(".historyTable").height()-$(".table-2").position().top-parseInt($(".table-2").css("margin-top"))-parseInt($(".table-2").css("margin-bottom"))-89; //31(表头)+26(info)+32(分页)=125
 	$("#table").DataTable({
@@ -52,7 +56,8 @@ function initTable(){
 		"bInfo" : true,	//页脚信息
 		"paging":true,	//分页
 		"pagingType": "full_numbers",
-		"pageLength": Math.floor(tableHeight/($("th").outerHeight()+5)),
+		// "pageLength": Math.floor(tableHeight/($("th").outerHeight()+5)),
+		"pageLength":15,
 		"bFilter": false,	//搜索
 		"language": {
 			 "emptyTable": "无",

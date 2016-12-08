@@ -13,19 +13,16 @@
 
     <table id="dytable" class="center">
         <%--collevel参数代表列的--%>
-        <thead>
-            <c:forEach var="i" begin="0" end="${table.collevel-1 }" step="1">
-                <tr>
-                    <c:forEach items="${table.valueList.get(i)}" var="cell">
-                        <th rowspan="${cell.rowspan}" colspan="${cell.colspan}">
-                                ${cell.value}
-                        </th>
-                    </c:forEach>
-                </tr>
-            </c:forEach>
-        </thead>
+        <c:forEach var="i" begin="0" end="${table.collevel-1 }" step="1">
+            <tr>
+                <c:forEach items="${table.valueList.get(i)}" var="cell">
+                    <th rowspan="${cell.rowspan}" colspan="${cell.colspan}">
+                            ${cell.value}
+                    </th>
+                </c:forEach>
+            </tr>
+        </c:forEach>
 
-        <tbody>
         <c:forEach var="j" begin="${table.collevel }" end="${table.valueList.size()-1 }" step="1">
             <tr>
                 <c:forEach items="${table.valueList.get(j)}" var="cell" varStatus="rowindex">
@@ -47,7 +44,6 @@
                 </c:forEach>
             </tr>
         </c:forEach>
-        </tbody>
 
     </table>
 </div>
@@ -60,7 +56,9 @@
             "bInfo": false,	//页脚信息
             "bFilter": false,	//搜索
             "bSort": false,	//排序
-            "scrollY": $(".table-1").parent().height() - parseInt($(".table-1").css("margin-bottom")) - $(".table-1 h3").outerHeight() - parseInt($(".table-1 h3").css("margin-top")) - parseInt($(".table-1 h3").css("margin-bottom")) - $("#dytable thead").outerHeight() - 10,
+            "scrollY":true,
+
+//            "scrollY": $(".table-1").parent().height() - parseInt($(".table-1").css("margin-bottom")) - $(".table-1 h3").outerHeight() - parseInt($(".table-1 h3").css("margin-top")) - parseInt($(".table-1 h3").css("margin-bottom")) - $("#dytable thead").outerHeight() - 10,
             "scrollX": true,
             "scrollCollapse": true
         });

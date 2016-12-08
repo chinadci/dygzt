@@ -30,8 +30,8 @@
 					</div>
 				</h3>
 				<div class="line-5"></div>
-				<div class="table-2">
-				<table id="table">
+				<div class="table-2" id="minTableContent">
+				<table id="table" >
 					<thead>
 						<tr>
 							<th style="width:80px">调研日期</th>
@@ -54,7 +54,7 @@
 </div>	
 </body>
 <script type="text/javascript" >
-setRemainingHeight(".approvetable","#right");
+//setRemainingHeight(".approvetable","#right");
 </script>
 <script src="resources/js/xzsj.js"  type="text/javascript"></script>
 <script src="resources/js/manual/approved.js"  type="text/javascript"></script>

@@ -22,7 +22,7 @@
 		</div>
 		<div id="right">
 			<div class="collapse-button"></div>
-			<div class="mod-content wrap3 persontable">
+			<div class="mod-content wrap3 persontable" >
 				<div class="table-2">
 				<a class="btn1 datatablebtn" href="addSE.do">新增</a>
 				<table id="table">
@@ -47,7 +47,7 @@
 </div>	
 </body>
 <script type="text/javascript" >
-setRemainingHeight(".persontable","#right");
+//setRemainingHeight(".persontable","#right");
 var tableHeight = $(".persontable").height()-parseInt($(".table-2").css("margin-top"))-parseInt($(".table-2").css("margin-bottom"))-125; //36(搜索框)+31(表头)+26(info)+32(分页)=125
 	$("#table").DataTable({
 		"bLengthChange": false,	//改变数据量
@@ -56,7 +56,8 @@ var tableHeight = $(".persontable").height()-parseInt($(".table-2").css("margin-
 		"paging":true,	//分页
 		"pagingType": "full_numbers",
 		"aoColumnDefs": [ { "bSortable": false, "aTargets": [ 6 ] }],	//第一列从0开始,序号为7列的列不进行排序，别的列均可进行排序
-		"pageLength": Math.floor(tableHeight/($("th").outerHeight()+5)),
+		//"pageLength": Math.floor(tableHeight/($("th").outerHeight()+5)),
+		"pageLength":15,
 		"bFilter": true,	//搜索
 		"language": {
 			 "emptyTable": "无",

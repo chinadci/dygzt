@@ -31,7 +31,7 @@ $(function(){
 			dataType:'html',
 			data : form.serialize()+"&condition="+condition,
 			beforeSend:function(){
-				showMask("数据获取中，请稍等...");
+				showMask("数据获取中...");
 			},
 			success : function(html) {
 				hideMask();

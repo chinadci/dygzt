@@ -50,7 +50,6 @@
 </div>
 </body>
 <script type="text/javascript">
-    setRemainingHeight(".persontable", "#right");
     var tableHeight = $(".persontable").height() - parseInt($(".table-2").css("margin-top")) - parseInt($(".table-2").css("margin-bottom")) - 125; //36(搜索框)+31(表头)+26(info)+32(分页)=125
     $("#table").DataTable({
         "bLengthChange": false,	//改变数据量
@@ -58,8 +57,10 @@
         "bInfo": true,	//页脚信息
         "paging": true,	//分页
         "pagingType": "full_numbers",
-        "aoColumnDefs": [{"bSortable": false, "aTargets": [4]}],	//第一列从0开始,序号为7列(第8列)的列不进行排序，别的列均可进行排序
-        "pageLength": Math.floor(tableHeight / ($("th").outerHeight() + 5)),
+        "aoColumnDefs": [{"bSortable": false, "aTargets": [4]}],	//第一列从0开始,序号为4列(第5列)的列不进行排序，别的列均可进行排序
+//        "pageLength": Math.floor(tableHeight / ($("th").outerHeight() + 5)),
+//        "pageLength": 15, //没页的条目数为15
+        "pageLength":15,
         "bFilter": true,	//搜索
         "language": {
             "emptyTable": "无",

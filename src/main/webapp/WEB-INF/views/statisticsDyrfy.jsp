@@ -33,7 +33,7 @@
 				</form>
 			</div>
 			<div class="mod-content wrap3 tableContent">
-				<div id="image" style="margin-right:3px;height:550px"></div>
+				<div id="image" class="chartImageDiv"></div>
 			</div>
 		</div>
 	</div>
@@ -43,7 +43,7 @@
 <script src="resources/js/jquery/highcharts-3d.js"></script>
 <script src="resources/js/statisticDyrfy.js"></script>
 <script type="text/javascript" >
-setRemainingHeight(".tableContent","#right",".autoform");
+//setRemainingHeight(".tableContent","#right",".autoform");
 </script>
 <script src="resources/js/xzsj.js"  type="text/javascript"></script>
 </html>

@@ -30,7 +30,7 @@
 					</div>
 				</h3>
 				<div class="line-5"></div>
-				<div class="table-2">
+				<div class="table-2" id="minTableContent">
 				<table id="table">
 					<thead>
 						<tr>
@@ -54,7 +54,7 @@
 </div>	
 </body>
 <script type="text/javascript" >
-setRemainingHeight(".historyTable","#right");
+//setRemainingHeight(".historyTable","#right");
 </script>
 <script src="resources/js/xzsj.js"  type="text/javascript"></script>
 <script src="resources/js/manual/manualHistory.js"></script>

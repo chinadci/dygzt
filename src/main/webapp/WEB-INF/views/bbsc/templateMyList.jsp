@@ -21,7 +21,7 @@
 				<h3 class="title"><s class="file"></s>我的模板
 				</h3>
 				<div class="line-5"></div>
-				<div class="table-2">
+				<div class="table-2" id="minTableContent">
 					<input name="ksrq" id = "ksrq" type="hidden">
 					<input name="jsrq" id = "jsrq" type="hidden">
 					<a class="btn2 active datatablebtn" style="right:100px" href="javascript:void(0)">我的模板</a>
@@ -50,7 +50,7 @@
 <script src="resources/js/xzsj.js"  type="text/javascript"></script>
 <script src="resources/js/bbsc/template.js"></script>
 <script type="text/javascript" >
-setRemainingHeight(".templateTable","#right");
+//setRemainingHeight(".templateTable","#right");
 //初始化table
 	var tableHeight= $(".templateTable").height()-$(".table-2").position().top-parseInt($(".table-2").css("margin-top"))-parseInt($(".table-2").css("margin-bottom"))-89; //31(表头)+26(info)+32(分页)=125
 	$("#table").DataTable({
@@ -61,7 +61,8 @@ setRemainingHeight(".templateTable","#right");
 		"bInfo" : true,	//页脚信息
 		"paging":true,	//分页
 		"pagingType": "full_numbers",
-		"pageLength": Math.floor(tableHeight/($("th").outerHeight()+5)),
+		//"pageLength": Math.floor(tableHeight/($("th").outerHeight()+5)),
+		"pageLength":15,
 		"bFilter": true,	//搜索
 		"language": {
 			 "emptyTable": "无",

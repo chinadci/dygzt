@@ -219,9 +219,9 @@
 </div>	
 </body>
 <script type="text/javascript" >
-init_body();
-setRemainingHeight("#menu",".menu",".menu h3",".line-5");
-setRemainingHeight(".manualdiv","#right");
+//init_body();
+//setRemainingHeight("#menu",".menu",".menu h3",".line-5");
+//setRemainingHeight(".manualdiv","#right");
 </script>
 <script src="resources/js/jquery/ajaxfileupload.js"></script>
 <script src="resources/js/manual/manualResearchDetail.js"></script>

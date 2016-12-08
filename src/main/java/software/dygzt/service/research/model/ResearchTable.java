@@ -25,7 +25,7 @@ public class ResearchTable implements Cloneable{
 	 */
 	private String jsrq;
 	/**
-	 * 法院范围
+	 * 法院范围(该表格要查询的法院)
 	 */
 	private String fyfw;
 	/**
@@ -33,15 +33,15 @@ public class ResearchTable implements Cloneable{
 	 */
 	private String condition;
 	/**
-	 * 表条件
+	 * 表条件(表格的一级列条件，进行初步查询)
 	 */
 	private ResearchQueryCondition baseCondition;
 	/**
-	 * 列变量
+	 * 列变量(二级列条件)
 	 */
 	private String colvarlist;
 	/**
-	 * 行变量
+	 * 行变量(行条件，案由，部门，法院等，需要设置不同的案由值，每个法院的案由集可能会不一样)
 	 */
 	private String rowvarlist;
 	/**
@@ -53,15 +53,15 @@ public class ResearchTable implements Cloneable{
 	 */
 	private int rowlevel;
 	/**
-	 * 行的信息
+	 * 行的信息(最重要的一个变量，基本表格要输出的数据都保存在这里，rowList 的一个元素，代表了页面中的表格要显示的一行数据)
 	 */
 	private List<ResearchTableRow> rowList;
 	/**
-	 * 列的信息
+	 * 列的信息(只是用来初始化前端页面的表头信息，具体数据豆包凑在 rowList 集合中)
 	 */
 	private List<ResearchTableColumn> colList;
 	/**
-	 * 列的条件
+	 * 列的条件，用来初步筛选(根据列条件查询出所有的符合的案件集合)
 	 */
 	private List<ResearchCellCondition> queryList;
 	/**

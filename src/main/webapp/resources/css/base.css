@@ -1,4 +1,3 @@
-/* ������ʽ */
 html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, caption, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
     border: 0;
     font-size: 100%;
@@ -75,7 +74,6 @@ s.ok {
     bottom: -4px;
     margin-right: 5px;
 }
-/* form1��ʽ����ѯform */
 .form1{
 	line-height:40px;
 	padding:10px 25px 10px 5px;
@@ -94,7 +92,6 @@ s.ok {
 	float :right;
 }
 
-/* form2��ʽ���Ǽ�form */
 .form2{
 	line-height:40px;
 	padding:10px 25px 10px 5px;
@@ -132,7 +129,6 @@ s.ok {
 	margin-bottom: -20px;
 	display: none;
 }
-/* form3����ʾ��Ϣ*/
 .form3{
 	line-height:40px;
 	padding:10px 25px 10px 5px;
@@ -163,9 +159,8 @@ s.ok {
     margin-left: 10px;
     position: relative;
 }
-/* form4��ʽ����������ϵͳ��group��form */
 .form4{
-	line-height:40px;
+	line-height:35px;
 	padding:10px 25px 10px 5px;
 	font-size:14px;
 }
@@ -240,7 +235,6 @@ s.ok {
 	padding:0px 20px 0px 0px;
 	float :right;
 }
-/* ��ӡtable */
 @media print{
 	.print_table{
 		margin:0 0 15px 10px;
@@ -282,11 +276,11 @@ s.ok {
 		display:none;
 	}
 }
-/* table������ʾ */
 .table-1{
 	margin:0 0 15px 10px;
 	text-align:center;
 	width:98%;
+	font-size: 14px;
 	font-size: 14px;
 	overflow-x: auto;
     overflow-y: hidden;
@@ -322,7 +316,6 @@ s.ok {
 	color:black;
 	text-decoration:underline;
 }
-/* table-2 �����б�*/
 .table-2{
 	width:96%;
     margin: 20px;
@@ -348,7 +341,6 @@ s.ok {
 .table-2 table input,.table-2 table select{
 	font-size: inherit;
 }
-/*table-3 form��table*/
 .table-3{
     padding: 8px 0px 0px 46px;
 }
@@ -367,7 +359,6 @@ s.ok {
 	padding:0px 20px;
 	border:1px solid #BBB;
 }
-/* table-4 �����б�*/
 .table-4{
 	width:96%;
     margin: 10px 10px 20px 20px;
@@ -403,7 +394,6 @@ s.ok {
 .table-4 td{
 	padding:5px 0px;
 }
-/*С��ť*/
 .cpt_ok		{background:url("img/component_ok.png");	width:20px;height:20px;display:inline-block;cursor:pointer;margin-left:5px;}
 .cpt_no		{background:url("img/component_no.png");	width:20px;height:20px;display:inline-block;cursor:pointer;margin-left:5px;}
 .cpt_menu_add 		{background:url("img/component_add.png");	width:16px;height:16px;display:inline-block;float:right;cursor:pointer;margin:0;}
@@ -415,7 +405,6 @@ s.ok {
 .cpt_menu_reason	{background:url("img/component_reason.png");	width:16px;height:16px;display:inline-block;cursor:pointer;margin:2px 5px 0 5px;}
 .cpt_menu_upload	{background:url("img/component_upload.png");	width:16px;height:16px;display:inline-block;cursor:pointer;margin:2px 5px 0 5px;}
 .cpt_menu_distribute	{background:url("img/component_distribute.png");	width:16px;height:16px;display:inline-block;cursor:pointer;margin:2px 5px 0 5px;}
-/* ͨ�üܹ�  */
 #content {
     min-width: 1050px;
     max-width: 1800px;
@@ -423,17 +412,20 @@ s.ok {
     font-size: 14px;
 }
 #main {
-    overflow: hidden;
+    /*overflow: hidden;*/
+	overflow: auto;
     background: #e1e1e1;
     padding-bottom: 1px;
+	min-height: 750px;
 }
 #left {
     float: left;
     width: 270px;
-    height:100%;
+    height: 100%;
 }
 #right{
 	margin-left:270px;
+    margin-right: 3px;
 	position:relative;
 	height:99.6%;
 }
@@ -444,6 +436,10 @@ s.ok {
 }
 .tableContent{
 	text-align:center;
+}
+
+#right #minTableContent{
+    min-height: 650px;
 }
 
 /* header.inc.jsp */
@@ -502,7 +498,6 @@ s.ok {
 	display:block;
 }
 
-/* �����б�  */
 .treelb>ul{
 	list-style:none;
 	padding: 25px 0px 10px 10px;
@@ -557,11 +552,10 @@ s.ok {
 	background:url(img/bg-select-jcfy-220.png) no-repeat;
 }
 
-/* ������ذ�ť */
 .collapse-button{
 	position:absolute;
 	left:-8px;
-	top:50%;
+	top: 160px;;
 	width:8px;
 	height:47px;
 	background:url(img/bg-collapse-left.png);
@@ -580,7 +574,6 @@ s.ok {
 	margin: 0 !important;
 }
 
-/*�Զ���dialog1*/
 .dialog1 .ui-widget-header{
 	background-color: #376298 !important;
 }
@@ -604,7 +597,6 @@ s.ok {
 }
 .dialog1 .dlgtree a:hover{cursor:pointer;color:red;}
 .dialog1 .dlgtree a.selected{color: white;background-color: #a0a0a0;}
-/*�Զ���dialog2*/
 .dlg-wrap{
 	box-shadow: 0px 0px 10px #000;
 	border-radius: 0 !important;
@@ -661,7 +653,6 @@ s.ok {
 	height:21px;
 }
 .dlg-wrap .ui-state-default,.ui-state-focus,.ui-state-hover,.ui-state-active{border:0px solid #fff !important;box-shadow:none;}
-/* ʱ��ѡ�񲻿�����ʾ */
 .dlg-wrap .error-tip{
 	font-size: 12px;
 	color:red;
@@ -679,7 +670,6 @@ s.ok {
 .timetab-content{border:2px solid #1e5f97 !important;padding:10px 20px;font-size:14px;}
 .timetab-content select,.timetab-content input{width:100px;text-align:center;}
 
-/* ���ֲ� */
 #mask{
 	position: fixed;
 	width: 100%;
@@ -708,7 +698,6 @@ s.ok {
 
 
 
-/* ��� margin */
 .col5{
 	width:5%;
 }

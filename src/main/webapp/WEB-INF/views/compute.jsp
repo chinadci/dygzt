@@ -55,7 +55,7 @@
 </div>	
 </body>
 <script type="text/javascript" >
-setRemainingHeight(".computetable","#right");
+//setRemainingHeight(".computetable","#right");
 </script>
 <script src="resources/js/jquery/ajaxfileupload.js"></script>
 <script src="resources/js/manual/compute.js"></script>

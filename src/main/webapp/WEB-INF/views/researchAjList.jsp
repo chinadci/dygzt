@@ -36,8 +36,8 @@
 	</div>	
 	
 <script type="text/javascript">
-	init_body();
-	setRemainingHeight(".autotable","#main");
+//	init_body();
+//	setRemainingHeight(".autotable","#main");
 	var tableHeight = $(".autotable").height()-$(".table-4").position().top-parseInt($(".table-4").css("margin-top"))-parseInt($(".table-4").css("margin-bottom"))-130;//39(搜索框)+31(表头)+26(info)+32(分页)=125
 	$("#ajtable").DataTable({
 		"bLengthChange": false,	//改变数据量
@@ -45,7 +45,8 @@
 		"bInfo" : true,	//页脚信息
 		"paging":true,	//分页
 		"pagingType": "full_numbers",
-		"pageLength": Math.floor(tableHeight/$("th").outerHeight()), 
+		//"pageLength": Math.floor(tableHeight/$("th").outerHeight()),
+		"pageLength":15,
 		"bFilter": true,	//搜索
 		"language": {
 			 "emptyTable": "无",

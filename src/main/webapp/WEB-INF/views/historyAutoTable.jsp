@@ -27,16 +27,15 @@
 				<div class="line-5"></div>
 				<div class="table-1" style="margin:10px 10px 20px 15px;">
 					<table id="dytable" class="center">
-						<thead>
-							<c:forEach var="i" begin="0" end="${table.collevel-1 }" step="1">
+						<c:forEach var="i" begin="0" end="${table.collevel-1 }" step="1">
 								<tr>
 									<c:forEach items="${table.valueList.get(i)}" var="cell">
 										<th rowspan="${cell.rowspan}" colspan="${cell.colspan}">
 											${cell.value}</th>
 									</c:forEach>
 								</tr>
-							</c:forEach>
-						</thead>
+						</c:forEach>
+
 						<tbody>
 							<c:forEach var="j" begin="${table.collevel }"
 								end="${table.valueList.size()-1 }" step="1">
@@ -67,8 +66,8 @@
 		</div>
 	</div>
 <script type="text/javascript">
-init_body();
-setRemainingHeight(".autotable","#main");
+//init_body();
+//setRemainingHeight(".autotable","#main");
 initDataTable();
 function initDataTable(){
 	$('#dytable').DataTable({

@@ -49,6 +49,6 @@
 	</div>
 </div>
 <script type="text/javascript">
-	init_body();
-	setRemainingHeight("#menu", ".menu", ".menu h3", ".line-5");
+//	init_body();
+//	setRemainingHeight("#menu", ".menu", ".menu h3", ".line-5");
 </script>

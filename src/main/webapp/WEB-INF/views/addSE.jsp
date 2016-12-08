@@ -58,7 +58,7 @@
 </div>	
 </body>
 <script type="text/javascript" >
-setRemainingHeight(".addtable","#right");
+//setRemainingHeight(".addtable","#right");
 </script>
 <script src="resources/js/addSE.js"  type="text/javascript"></script>
 </html>

@@ -25,7 +25,7 @@
 </div>	
 </body>
 <script type="text/javascript" >
-setRemainingHeight(".manualdiv","#right");
+//setRemainingHeight(".manualdiv","#right");
 </script>
 <script src="resources/js/jquery/ajaxfileupload.js"></script>
 <script src="resources/js/manual/manualResearch.js"></script>

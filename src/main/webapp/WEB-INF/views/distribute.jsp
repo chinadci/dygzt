@@ -57,7 +57,7 @@
 </div>	
 </body>
 <script type="text/javascript" >
-setRemainingHeight(".distributetable","#right");
+//setRemainingHeight(".distributetable","#right");
 </script>
 <script src="resources/js/manual/distribute.js"></script>
 </html>

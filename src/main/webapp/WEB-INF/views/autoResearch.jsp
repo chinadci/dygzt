@@ -17,17 +17,17 @@
 		</div>
 		<div id="right">
 			<div class="collapse-button"></div>
-			<div class="mod-content wrap3 autoform">
+			<div class="mod-content wrap3 autoform"  >
 				<%@include file="inc/autoform.inc.jsp"%>
 			</div>
-			<div class="mod-content wrap3 tableContent">
+			<div class="mod-content wrap3 tableContent" id="minTableContent">
 			</div>
 		</div>
 	</div>
 </div>	
 </body>
 <script type="text/javascript" >
-setRemainingHeight(".tableContent","#right",".autoform");
+//setRemainingHeight(".tableContent","#right",".autoform");
 </script>
 <script src="resources/js/research/autoResearch.js"></script>
 </html>

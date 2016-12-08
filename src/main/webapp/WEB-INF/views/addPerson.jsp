@@ -60,7 +60,7 @@
 </div>	
 </body>
 <script type="text/javascript" >
-setRemainingHeight(".addtable","#right");
+//setRemainingHeight(".addtable","#right");
 </script>
 <script src="resources/js/xzry.js"  type="text/javascript"></script>
 <script src="resources/js/xzfy.js"  type="text/javascript"></script>

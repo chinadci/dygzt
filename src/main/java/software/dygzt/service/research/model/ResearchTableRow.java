@@ -3,6 +3,7 @@ package software.dygzt.service.research.model;
 import java.util.ArrayList;
 import java.util.List;
 
+/*保存每一行的数据，每一行其实就是多个 cell 组成而来的*/
 public class ResearchTableRow {
 	private ResearchTableColumn rowInfo;
 	private List<ResearchTableCell> value;

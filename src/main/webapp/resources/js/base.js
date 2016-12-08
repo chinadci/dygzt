@@ -1,6 +1,8 @@
 //等待图片
 var waitImg = '<img src="resources/css/img/loading.gif">';
 $(function(){
+
+	/*每次在页面刷新的时候，初始化页面效果*/
 	//边框效果
 	$(".wrap1").wrap('<div class="wrap1L1"></div>');
 	$(".wrap1L1").wrap('<div class="wrap1L2"></div>');
@@ -34,8 +36,8 @@ $(function(){
 		}
 	});
 	
-	$(".wrap3").wrap('<div class="wrap3L1"></div>');
-	$(".wrap3L1").wrap('<div class="wrap3L2"></div>');
+	$(".wrap3").wrap('<div class="wrap3L1"></div>'); //用 cloass = "wrap3L1" 包裹 wrap3，形成一个灰色边框的包裹层，
+	$(".wrap3L1").wrap('<div class="wrap3L2"></div>');//用 cloass = "wrap3L2" 包裹 wrap3，形成一个灰色边框的包裹层，
 	
 	$(".wrap3L1").css({
 		'border':"1px solid #a5a5a5"
@@ -119,11 +121,17 @@ $(function(){
 	$('body').append('<div id="mask"><div class="wait_wrapper"><p class="J_WAIT"></p><p class="waittext">加载中，请稍等……</p></div></div>');
 	
 });
+
+
 //初始化body
+/*
 function init_body(){
 	max_body();
 	setRemainingHeight("#main","body","#welcome","#header");
 }
+*/
+
+/*
 function max_body(){
 	var myw = screen.availWidth; //定义一个myw，接受到当前全屏的宽 
 	var myh = screen.availHeight; //定义一个myw，接受到当前全屏的高 
@@ -131,7 +139,7 @@ function max_body(){
 	window.resizeTo(myw, myh); //把当前窗体的长宽跳转为myw和myh 
 	var windowHeight = $(window).height();
 	$("body").outerHeight(windowHeight<700?700:windowHeight);
-}
+}*/
 //弹提示框
 function alertEmpty(msg,title) {
 	$('#empty_alert p').html(msg);
@@ -155,7 +163,7 @@ function hideMask() {
 	$('#mask .waittext').html("加载中，请稍等……");
 	$('#mask').hide();
 }
-
+/*
 //me:当前，father：父元素，后面可以放无数个其他占地方的元素
 function setRemainingHeight(me,father){
 	var length = arguments.length;
@@ -164,7 +172,7 @@ function setRemainingHeight(me,father){
 		height+=$(arguments[i]).outerHeight();
 	}
 	$(me).outerHeight($(father).height()-height);
-}
+}*/
 //date1和date2都是string
 function dateDiff(date1,date2){
 	return Date.parse(date1)>Date.parse(date2);

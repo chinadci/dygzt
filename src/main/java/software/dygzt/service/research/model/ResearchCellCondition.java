@@ -1,29 +1,28 @@
 package software.dygzt.service.research.model;
 
+import org.apache.log4j.Logger;
+import software.dygzt.util.DateUtil;
+import software.dygzt.util.StringUtil;
+
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-import org.apache.log4j.Logger;
-
-import software.dygzt.util.DateUtil;
-import software.dygzt.util.StringUtil;
 
 /**
  * 调研条件VO
  */
 public class ResearchCellCondition implements Cloneable{
 	private static Logger logger = Logger.getLogger(ResearchCellCondition.class);
-	//案件性质
+	//案件性质，比如: 新收，旧存，已结，未结
 	private String ajxz;
-	//审判程序
+	//审判程序，比如: 民事一审等(二级列)
 	private String spcx;
 	//审判程序类型
 	private String spcxlx;
 	//审判程序类型特别，由于新旧不同或者组合原因
 	private String spcxlxtb;
-	//立案案由
+	//立案案由，行条件
 	private String laay;
 	//办案审判庭
 	private String baspt;

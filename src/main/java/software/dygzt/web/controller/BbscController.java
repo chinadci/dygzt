@@ -76,7 +76,7 @@ public class BbscController implements InitializingBean {
         String[] lbList = new String[]{"qbtj", "xstj", "mstj", "xztj", "zxtj", "pctj", "qttj"};
         String[] lbmcList = new String[]{"所有", "刑事", "民事", "行政", "执行", "赔偿", "其他"};
         //xxbbMap,researchBaseImpl.getXxbbMap(),这个是为了初始化页面二级列展开面板的数据,一个 List ,list 里面的内容用 map 来保存,
-        model.addAttribute("xxbbMap", researchBaseImpl.getXxbbMap());
+        model.addAttribute("xxbbMap", researchBaseImpl.getXxbbMap());//xxbbMap 中保存的是 lbList 每个项的对应的内容
         model.addAttribute("lbList", lbList);
         model.addAttribute("lbmcList", lbmcList);
         return "bbsc/bbscCustom";
@@ -134,9 +134,11 @@ public class BbscController implements InitializingBean {
         condition.setBblx(bblx);
         //因为使用 factory 实现的,factory 通过键值对的形式保存 ResearchVariableService 接口的 Imply 实体对象,作用是创建表。
         ResearchVariableService researchService = factory.getServiceByName(condition.getBblx());
-        //researchBaseImpl是 ResearchService 类的实体,里面的方法包含了所有用来获取表格生成需要的数据。
+        //根据表格筛选的条件，判断表格是否生成过。
         ResearchTableDO po = researchBaseImpl.findTable(condition.toString());
-        if (po == null) {    //如果没生成过,则根据 conditon 来创建一个 ResearchTable 对象
+
+        /*如果没生成过,则根据查询条件 conditon 去数据库中查询，把结果放在 ResearchTable 对象中*/
+        if (po == null) {
             try {
                 ResearchTable table = researchService.createTable(condition);
                 if (DateUtil.getDiffDays(DateUtil.parse(condition.getJsrq(), DateUtil.webFormat), new Date()) != 0) {

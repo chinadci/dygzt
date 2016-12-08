@@ -74,7 +74,7 @@
 				</form>
 			</div>
 			<div class="mod-content wrap3 searchTable">
-				<div class="table-2">
+				<div class="table-2" id="minTableContent">
 					<table id="table">
 						<thead>
 							<tr>
@@ -98,7 +98,7 @@
 </div>	
 </body>
 <script type="text/javascript" >
-setRemainingHeight(".searchTable","#right",".autoform");
+//setRemainingHeight(".searchTable","#right",".autoform");
 </script>
 <script src="resources/js/xzsj.js"  type="text/javascript"></script>
 <script src="resources/js/bbsc/bbscAutoSearch.js"></script>

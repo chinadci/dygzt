@@ -45,7 +45,9 @@ $(function(){
 		$("#toggle-btn").click(
 			function(){
 				$("#expend-list").toggle();
-			});
+			}
+
+			);
 	});
 	
 	//二级菜单面板打开的关闭
@@ -95,11 +97,11 @@ $(function(){
 					jsrq:$("#jsrq").val(),
 				},
 				beforeSend:function(){
-					showMask("数据获取中，请稍等...");
+					showMask("数据获取中...");
 				},
 				success : function(html) {
 					hideMask();
-					$(".tableContent").html(html);
+					$(".tableContent").html(html); //把后台生成的 HTML 添加到类为 .tableContent 的地方
 				}
 			});
 		}
@@ -205,7 +207,7 @@ function canResearchAy(){
 }
 
 function changeHeight(){
-	setRemainingHeight(".tableContent","#right",".bbscform");
+	// setRemainingHeight(".tableContent","#right",".bbscform");
 	if($('#dytable').length>0){
 		$('#dytable').DataTable().destroy(false);
 		initDataTable();

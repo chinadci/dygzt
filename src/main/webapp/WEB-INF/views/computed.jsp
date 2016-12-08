@@ -53,7 +53,7 @@
 </div>	
 </body>
 <script type="text/javascript" >
-setRemainingHeight(".computetable","#right");
+//setRemainingHeight(".computetable","#right");
 </script>
 <script src="resources/js/xzsj.js"  type="text/javascript"></script>
 <script src="resources/js/manual/computed.js"  type="text/javascript"></script>

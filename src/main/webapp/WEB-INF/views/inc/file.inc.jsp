@@ -8,4 +8,5 @@
 <script src="resources/js/jquery/jquery-ui-timepicker-zh-CN.js"></script>
 <script src="resources/js/jquery/jquery.treeview.js" type="text/javascript"></script>
 <script type="text/javascript" src="resources/js/jquery/datatables.min.js"></script>
+<script type="text/javascript" src="resources/js/jquery/css3-mediaqueries.js"></script>
 <script src="resources/js/base.js"></script>
