@@ -121,6 +121,21 @@ public class BbscController implements InitializingBean {
         return createTable(condition, model, "historyAutoTable", "error");
     }
 
+
+
+
+
+    public boolean hasValue(List<ResearchTableCell> list) {
+        boolean hasNum = false;
+        for (ResearchTableCell cell : list) {
+            if (cell.getValueDouble() != 0) {
+                hasNum = true;
+                break;
+            }
+        }
+        return hasNum;
+    }
+
     /**
      * 生成报表函数(ok)
      *
@@ -137,8 +152,10 @@ public class BbscController implements InitializingBean {
         //根据表格筛选的条件，判断表格是否生成过。
         ResearchTableDO po = researchBaseImpl.findTable(condition.toString());
 
-        /*如果没生成过,则根据查询条件 conditon 去数据库中查询，把结果放在 ResearchTable 对象中*/
-        if (po == null) {
+        /*如果没生成过,则根据查询条件 conditon 去数据库中查询，把结果放在 ResearchTable 对象中
+        * 先把优化去除
+        * */
+//        if (po == null) {
             try {
                 ResearchTable table = researchService.createTable(condition); //根据 condtion 来生成 ResearchTable 对象
 
@@ -149,29 +166,27 @@ public class BbscController implements InitializingBean {
 
                 ResearchTable samePeroidLastYearTable = researchService.createTable(conditionSPLY);//获得去年同期的 ResearchTable 对象
 
-                /*对table 中每个 ResearchTableCell cell 中的其他字段进行赋值*/
-                List<ResearchTableRow> rowList = table.getRowList(); //取得行集合
-                List<ResearchTableRow> rowListSPLY = samePeroidLastYearTable.getRowList(); //取得行集合
+                assignSamePeriodLastYearValue(table,samePeroidLastYearTable); //个 cell 中的 samePeriodLastYearValue 字段赋值
 
-                /* 把 samePeroidLastYearTable 中的value 赋值给 table 中的 samePeriodLastYearValue
-                * 循环复制即可，循环复制常州出现错误，因为去年同期和现在的table 的rowList 的行数出现了不一致。
-                * 如果今年的行数比如年少，则不会出现运行时错误，否则运行会出错
-                * */
-                if(table.getRowList().size() == samePeroidLastYearTable.getRowList().size()){
-                    for (int i = 0; i < rowList.size(); i++) {
-                        ResearchTableRow researchTableRow = rowList.get(i);
-                        ResearchTableRow researchTableRowSPLY = rowListSPLY.get(i);
 
-                        List<ResearchTableCell> researchTableCellList = researchTableRow.getValue();
-                        List<ResearchTableCell> researchTableCellListSPLY = researchTableRowSPLY.getValue();
-                        for (int j = 0; j < researchTableCellList.size(); j++) {
-                            String samePeriodLastYear = researchTableCellListSPLY.get(j).getValue();
-                            researchTableCellList.get(j).setSamePeriodLastYearValue(Double.valueOf(samePeriodLastYear));
-                        }
+                List<ResearchTableRow> rows = table.getRowList();
+                int i = 0;
+                table.setRowList(new ArrayList<ResearchTableRow>()); //置空 table 的 rowList ，在重新赋值筛选过的 row
+                for (int j = 0; j < rows.size(); j++) {
+                    List<ResearchTableCell> cellList = new ArrayList<ResearchTableCell>();
+                    cellList.addAll(rows.get(j).getValue()); //从 row 拿出 cellList
+                    if (hasValue(cellList)) { //如果cell 中有值，则加一行，否则，不加
+                        ResearchTableColumn oldRow = rows.get(j).getRowInfo();
+                        i++;
+                        //建row
+                        ResearchTableRow row = new ResearchTableRow();
+                        ResearchTableColumn rowAttr = new ResearchTableColumn(i, oldRow.getColName(), oldRow.getLevel());
+                        row.setRowInfo(rowAttr);
+                        row.setValue(cellList);
+                        table.getRowList().add(row);
                     }
-                }else{
-                    //不对 table 中每个 cell 中的 samePeriodLastYearValue 赋值
                 }
+
                 if (DateUtil.getDiffDays(DateUtil.parse(condition.getJsrq(), DateUtil.webFormat), new Date()) != 0) {
                     Runnable r = new SaveThread(table, -1, 2);
                     Thread t = new Thread(r);
@@ -187,7 +202,7 @@ public class BbscController implements InitializingBean {
                 model.addAttribute("error", e.getMessage());
                 return error_jsp;
             }
-        } else if (StringUtil.isNotBlank(po.getSbfy())) {    //生成失败过
+       /* } else if (StringUtil.isNotBlank(po.getSbfy())) {    //生成失败过
             String fylist[] = po.getSbfy().split(";");
             boolean connect = false;
             String curDb = CustomerContextHolder.getCustomerType();
@@ -225,6 +240,37 @@ public class BbscController implements InitializingBean {
         } else { //已经生产过
             model.addAttribute("table", researchBaseImpl.findSavedTable(po.getId()));
             return success_jsp;
+        }*/
+    }
+
+
+    /**
+     *
+     * 为了实现同比，在后台就把需要的数据初始化，放在 cell 中
+     * 把 samePeroidLastYearTable 中的value 赋值给 table 中的 samePeriodLastYearValue
+     * 循环复制即可，循环复制常州出现错误，因为去年同期和现在的table 的rowList 的行数出现了不一致。
+     * 如果今年的行数比如年少，则不会出现运行时错误，否则运行会出错
+     *
+     * */
+    public static void assignSamePeriodLastYearValue(ResearchTable table,ResearchTable samePeroidLastYearTable){
+        /*对table 中每个 ResearchTableCell cell 中的其他字段进行赋值*/
+        List<ResearchTableRow> rowList = table.getRowList(); //取得行集合
+        List<ResearchTableRow> rowListSPLY = samePeroidLastYearTable.getRowList(); //取得行集合
+
+        if(table.getRowList().size() == samePeroidLastYearTable.getRowList().size()){
+            for (int i = 0; i < rowList.size(); i++) {
+                ResearchTableRow researchTableRow = rowList.get(i);
+                ResearchTableRow researchTableRowSPLY = rowListSPLY.get(i);
+
+                List<ResearchTableCell> researchTableCellList = researchTableRow.getValue();
+                List<ResearchTableCell> researchTableCellListSPLY = researchTableRowSPLY.getValue();
+                for (int j = 0; j < researchTableCellList.size(); j++) {
+                    String samePeriodLastYear = researchTableCellListSPLY.get(j).getValue();
+                    researchTableCellList.get(j).setSamePeriodLastYearValue(Double.valueOf(samePeriodLastYear));
+                }
+            }
+        }else{
+            //不对 table 中每个 cell 中的 samePeriodLastYearValue 赋值
         }
     }
 

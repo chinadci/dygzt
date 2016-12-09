@@ -82,7 +82,8 @@ public class ResearchAyJzrhImpl implements ResearchVariableService {
 				researchBaseImpl.generateCell(con,cellList,DataSourcePrefixEnum.JZRH.getPrefix()+table.getFyfw(),1,table.getCondition());
 				con.setCases(oldCase);
 			}
-			if(researchBaseImpl.hasValue(cellList)){
+			/*如果该行的 cellList 中的值都为0，或者 Null 则不把该行显示在最终的页面 table 中*/
+//			if(researchBaseImpl.hasValue(cellList)){
 				//建row
 				i++;
 				ResearchTableRow row = new ResearchTableRow();
@@ -90,7 +91,7 @@ public class ResearchAyJzrhImpl implements ResearchVariableService {
 				row.setRowInfo(rowAttr);
 				row.setValue(cellList);
 				table.getRowList().add(row);
-			}
+//			}
 		}
 		
 		//总计

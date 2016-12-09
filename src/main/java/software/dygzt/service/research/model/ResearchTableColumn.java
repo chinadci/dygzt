@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ResearchTableColumn implements Cloneable{
-	private int colNum;//第几个位置,一级列下面的二级列的位置,比如一级列3个格子,colNum=1代表在的格子(从0开始计数)
+	private int colNum; //第几列
 	private String colName;
 	private List<String> fatherName;
 	/**

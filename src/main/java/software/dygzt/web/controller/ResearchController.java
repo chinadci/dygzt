@@ -12,8 +12,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import software.dygzt.data.dmb.dao.DyDmbDao;
 import software.dygzt.data.dmb.dataobject.DyDmbDO;
 import software.dygzt.data.research.dataobject.ResearchTableDO;
-import software.dygzt.dynamicds.CustomerContextHolder;
-import software.dygzt.dynamicds.DataSourceRouter;
 import software.dygzt.dynamicds.FYDataSourceEnum;
 import software.dygzt.service.dmb.model.DmVO;
 import software.dygzt.service.fy.FyService;
@@ -93,9 +91,19 @@ public class ResearchController implements InitializingBean{
 		condition.setBblx(bblx);
 		ResearchVariableService researchService = factory.getServiceByName(condition.getBblx());
 		ResearchTableDO po = researchBaseImpl.findTable(condition.toString());
-		if(po==null){	//没生成过
+//		if(po==null){	//没生成过
 			try {
-				ResearchTable table = researchService.createTable(condition);
+				ResearchTable table = researchService.createTable(condition);//根据 condtion 来生成 ResearchTable 对象
+
+				ResearchConditionVO conditionSPLY = condition;
+                 /*获得开始日期和结束日期，并把年数减1*/
+				conditionSPLY.setKsrq(DateUtil.format(DateUtil.addYears((DateUtil.parse(conditionSPLY.getKsrq(), DateUtil.webFormat)), -1), DateUtil.webFormat));
+				conditionSPLY.setJsrq(DateUtil.format(DateUtil.addYears((DateUtil.parse(conditionSPLY.getJsrq(), DateUtil.webFormat)), -1), DateUtil.webFormat));
+
+				ResearchTable samePeroidLastYearTable = researchService.createTable(conditionSPLY);//获得去年同期的 ResearchTable 对象
+				BbscController.assignSamePeriodLastYearValue(table,samePeroidLastYearTable); //对 cell 中的 samePeriodLastYearValue 字段赋值
+
+
 				if(DateUtil.getDiffDays(DateUtil.parse(condition.getJsrq(),
 					DateUtil.webFormat),new Date())!=0){
 					Runnable r = new SaveThread(table,-1,1);
@@ -109,7 +117,7 @@ public class ResearchController implements InitializingBean{
 				model.addAttribute("error",e.getMessage());
 				return "inc/error.inc";
 			}
-		}else if(StringUtil.isNotBlank(po.getSbfy())){	//生成失败过
+		/*}else if(StringUtil.isNotBlank(po.getSbfy())){	//生成失败过
 			String fylist[] = po.getSbfy().split(";");
 			boolean connect = false;
 			String curDb = CustomerContextHolder.getCustomerType();
@@ -147,7 +155,7 @@ public class ResearchController implements InitializingBean{
 		}else{
 			model.addAttribute("table",researchBaseImpl.findSavedTable(po.getId()));
 			return "pop/researchTable";
-		}
+		}*/
 	}
 	
 	/**
