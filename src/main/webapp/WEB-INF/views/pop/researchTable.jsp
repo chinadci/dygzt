@@ -28,15 +28,24 @@
                 <c:forEach items="${table.valueList.get(j)}" var="cell" varStatus="rowindex">
                     <td rowspan="${cell.rowspan}" colspan="${cell.colspan}"
                         <c:if test="${rowindex.index<table.rowlevel}">class="rowheader"</c:if>>
-                        <!-- ${cell.value}-->
+                            <%--<!-- ${cell.value}-->--%>
 
                         <c:choose>
+                            <%--如果该 cell 中的 sql 值，不为空，则把 sql 输出到 a 标签中，再赋值；否则直接赋值--%>
                             <c:when test="${cell.sql!=null}">
                                 <a href="researchlb.do?base=${cell.base}&sql=${cell.sql}&fydm=${cell.fydm}"
-                                   target="_blank">${cell.value}</a>
+                                   target="_blank">
+                                        ${cell.value}
+                                </a>
+                                <label class="samePeriodLastYear" id="samePeriodLastYear">
+                                    [${cell.samePeriodLastYearValue}]
+                                </label>
                             </c:when>
                             <c:otherwise>
                                 ${cell.value}
+                                <label class="samePeriodLastYear" id="samePeriodLastYear">
+                                        ${cell.samePeriodLastYearValue}
+                                </label>
                             </c:otherwise>
                         </c:choose>
 
@@ -56,7 +65,7 @@
             "bInfo": false,	//页脚信息
             "bFilter": false,	//搜索
             "bSort": false,	//排序
-            "scrollY":true,
+            "scrollY": true,
 
 //            "scrollY": $(".table-1").parent().height() - parseInt($(".table-1").css("margin-bottom")) - $(".table-1 h3").outerHeight() - parseInt($(".table-1 h3").css("margin-top")) - parseInt($(".table-1 h3").css("margin-bottom")) - $("#dytable thead").outerHeight() - 10,
             "scrollX": true,

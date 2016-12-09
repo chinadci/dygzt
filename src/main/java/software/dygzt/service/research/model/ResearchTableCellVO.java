@@ -5,12 +5,23 @@ import software.dygzt.util.NumberUtil;
 
 public class ResearchTableCellVO {
 	private String value;
+	private String samePeriodLastYearValue;
 	private int colspan;
 	private int rowspan;
 	private String base;
 	private String sql;
 	private String fydm;
-	
+
+	public ResearchTableCellVO(String value, String samePeriodLastYearValue, int colspan, int rowspan, String base, String sql, String fydm) {
+		super();
+		this.value = value;
+		this.samePeriodLastYearValue = samePeriodLastYearValue;
+		this.colspan = colspan;
+		this.rowspan = rowspan;
+		this.base = base;
+		this.sql = sql;
+		this.fydm = fydm;
+	}
 	public ResearchTableCellVO(String value, int colspan, int rowspan,String base,
 			String sql,String fydm) {
 		super();
@@ -21,9 +32,11 @@ public class ResearchTableCellVO {
 		this.sql = sql;
 		this.fydm = fydm;
 	}
-	
-	public ResearchTableCellVO(Double value, int colspan, int rowspan,String base,
-			String sql,String fydm) {
+
+
+
+	public ResearchTableCellVO(Double value, int colspan, int rowspan, String base,
+							   String sql, String fydm) {
 		super();
 		setValue(value);
 		this.colspan = colspan;
@@ -76,4 +89,14 @@ public class ResearchTableCellVO {
 	public void setBase(String base) {
 		this.base = base;
 	}
+
+	public void setSamePeriodLastYearValue(String samePeriodLastYearValue) {
+		this.samePeriodLastYearValue = samePeriodLastYearValue;
+	}
+
+	public String getSamePeriodLastYearValue() {
+
+		return samePeriodLastYearValue;
+	}
+
 }

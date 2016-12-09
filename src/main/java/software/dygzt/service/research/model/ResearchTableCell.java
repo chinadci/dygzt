@@ -4,9 +4,9 @@ import software.dygzt.util.NumberUtil;
 
 
 public class ResearchTableCell {
-    private Double value;
+    private Double value; //当前查询条件需要显示的值
     private Double lastYearValue;
-    private Double samePeriodLastYearValue;//同比，及和去年同时间段想不
+    private Double samePeriodLastYearValue;//同比值
 
     private Double lastPeriod;//环比
     private String condition;    //条件
@@ -67,9 +67,14 @@ public class ResearchTableCell {
         this.samePeriodLastYearValue = samePeriodLastYearValue;
     }
 
-    public Double getSamePeriodLastYearValue() {
+    public String getSamePeriodLastYearValue() {
 
-        return samePeriodLastYearValue;
+        if (samePeriodLastYearValue.intValue() == samePeriodLastYearValue) {
+            return String.valueOf(samePeriodLastYearValue.intValue());
+        } else {
+            return NumberUtil.changeNumber(samePeriodLastYearValue.doubleValue(), 4);
+        }
+
     }
 
     public void setLastPeriod(Double lastPeriod) {

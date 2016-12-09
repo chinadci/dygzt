@@ -132,7 +132,7 @@ public class BbscController implements InitializingBean {
         //因为要统计 jzrh 中的数据,所以要 bblx 的值进行更改,统一改为对应的 jzrh 字串,然后对 condition 进行更改。
         String bblx = databaseMap.get(condition.getBblx());
         condition.setBblx(bblx);
-        //因为使用 factory 实现的,factory 通过键值对的形式保存 ResearchVariableService 接口的 Imply 实体对象,作用是创建表。
+        //因为使用 factory 实现的,factory 通过键值对的形式保存 ResearchVariableService 接口的 Imply 实体对象,作用根据为不同的报表类型来创建表。
         ResearchVariableService researchService = factory.getServiceByName(condition.getBblx());
         //根据表格筛选的条件，判断表格是否生成过。
         ResearchTableDO po = researchBaseImpl.findTable(condition.toString());
@@ -140,13 +140,47 @@ public class BbscController implements InitializingBean {
         /*如果没生成过,则根据查询条件 conditon 去数据库中查询，把结果放在 ResearchTable 对象中*/
         if (po == null) {
             try {
-                ResearchTable table = researchService.createTable(condition);
+                ResearchTable table = researchService.createTable(condition); //根据 condtion 来生成 ResearchTable 对象
+
+                BbscConditionVO conditionSPLY = condition;
+                 /*获得开始日期和结束日期，并把年数减1*/
+                conditionSPLY.setKsrq(DateUtil.format(DateUtil.addYears((DateUtil.parse(conditionSPLY.getKsrq(), DateUtil.webFormat)), -1), DateUtil.webFormat));
+                conditionSPLY.setJsrq(DateUtil.format(DateUtil.addYears((DateUtil.parse(conditionSPLY.getJsrq(), DateUtil.webFormat)), -1), DateUtil.webFormat));
+
+                ResearchTable samePeroidLastYearTable = researchService.createTable(conditionSPLY);//获得去年同期的 ResearchTable 对象
+
+                /*对table 中每个 ResearchTableCell cell 中的其他字段进行赋值*/
+                List<ResearchTableRow> rowList = table.getRowList(); //取得行集合
+                List<ResearchTableRow> rowListSPLY = samePeroidLastYearTable.getRowList(); //取得行集合
+
+                /* 把 samePeroidLastYearTable 中的value 赋值给 table 中的 samePeriodLastYearValue
+                * 循环复制即可，循环复制常州出现错误，因为去年同期和现在的table 的rowList 的行数出现了不一致。
+                * 如果今年的行数比如年少，则不会出现运行时错误，否则运行会出错
+                * */
+                if(table.getRowList().size() == samePeroidLastYearTable.getRowList().size()){
+                    for (int i = 0; i < rowList.size(); i++) {
+                        ResearchTableRow researchTableRow = rowList.get(i);
+                        ResearchTableRow researchTableRowSPLY = rowListSPLY.get(i);
+
+                        List<ResearchTableCell> researchTableCellList = researchTableRow.getValue();
+                        List<ResearchTableCell> researchTableCellListSPLY = researchTableRowSPLY.getValue();
+                        for (int j = 0; j < researchTableCellList.size(); j++) {
+                            String samePeriodLastYear = researchTableCellListSPLY.get(j).getValue();
+                            researchTableCellList.get(j).setSamePeriodLastYearValue(Double.valueOf(samePeriodLastYear));
+                        }
+                    }
+                }else{
+                    //不对 table 中每个 cell 中的 samePeriodLastYearValue 赋值
+                }
                 if (DateUtil.getDiffDays(DateUtil.parse(condition.getJsrq(), DateUtil.webFormat), new Date()) != 0) {
                     Runnable r = new SaveThread(table, -1, 2);
                     Thread t = new Thread(r);
                     t.start();
                 }
+
+                /*传递的 Model 会先转为 VO 对象，方便进行渲染*/
                 model.addAttribute("table", Convertor.model2vo(table));//返回到前台页面的是 ResearchTableVO 对象。
+                //model.addAttribute("samePeroidLastYearTable", Convertor.model2vo(samePeroidLastYearTable));//把 samePeroidLastYearTable 返回
                 return success_jsp;
             } catch (Exception e) {
                 logger.error("生成表格错误：", e);
@@ -188,7 +222,7 @@ public class BbscController implements InitializingBean {
                 model.addAttribute("table", researchBaseImpl.findSavedTable(po.getId()));
                 return success_jsp;
             }
-        } else {
+        } else { //已经生产过
             model.addAttribute("table", researchBaseImpl.findSavedTable(po.getId()));
             return success_jsp;
         }
@@ -819,7 +853,7 @@ public class BbscController implements InitializingBean {
     public void changePersonList(HttpServletRequest request,
                                  HttpServletResponse response, ModelMap model, DatatablesPagedVO pagedVO) throws IOException {
         //得到人员列表
-       // String curDb = CustomerContextHolder.getCustomerType();
+        // String curDb = CustomerContextHolder.getCustomerType();
         //DataSourceRouter.routerToYzjcJzk(); //切换该数据库去读取要获得的数据
         List<String> qxList = new ArrayList<String>();
         qxList.add("调研人");
@@ -850,8 +884,8 @@ public class BbscController implements InitializingBean {
         for (DyXtyhVO src : pagedAjs) {
             DyXtyhVO des = new DyXtyhVO();
             des.setXh(src.getXh());
-            des.setFymc(src.getFymc()+"<input type='hidden' name='fydm' value='"+src.getFydm()+"'/>");
-            des.setYhm(src.getYhm()+"<input type='hidden' name='yhm' value='"+src.getYhm()+"'/>");
+            des.setFymc(src.getFymc() + "<input type='hidden' name='fydm' value='" + src.getFydm() + "'/>");
+            des.setYhm(src.getYhm() + "<input type='hidden' name='yhm' value='" + src.getYhm() + "'/>");
             des.setName(src.getName());
             des.setBtn("<div class='cpt_menu_del' title='删除'></div>");
             result.add(des);

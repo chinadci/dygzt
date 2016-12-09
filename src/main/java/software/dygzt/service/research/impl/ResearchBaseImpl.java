@@ -870,7 +870,7 @@ public class ResearchBaseImpl implements ResearchService, InitializingBean {
             for (ResearchTable tmpTable : tables) {
                 cellList.addAll(tmpTable.getRowList().get(j).getValue());
             }
-            if (hasValue(cellList)) {
+//            if (hasValue(cellList)) { //如果cell 中有值，则加一行，否则，不加，为了加入同比，去了这个判断条件
                 ResearchTableColumn oldRow = rows.get(j).getRowInfo();
                 //建row
                 i++;
@@ -879,7 +879,7 @@ public class ResearchBaseImpl implements ResearchService, InitializingBean {
                 row.setRowInfo(rowAttr);
                 row.setValue(cellList);
                 table.getRowList().add(row);
-            }
+//            }
         }
         return table;
     }
