@@ -74,6 +74,19 @@ public class ResearchController implements InitializingBean{
 //		}
 		return "autoResearch";
 	}
+
+
+	public boolean hasValue(List<ResearchTableCell> list) {
+		boolean hasNum = false;
+		for (ResearchTableCell cell : list) {
+			if (cell.getValueDouble() != 0) {
+				hasNum = true;
+				break;
+			}
+		}
+		return hasNum;
+	}
+
 	/**
 	 * 自助调研报表生成
 	 * @param request
@@ -103,6 +116,24 @@ public class ResearchController implements InitializingBean{
 				ResearchTable samePeroidLastYearTable = researchService.createTable(conditionSPLY);//获得去年同期的 ResearchTable 对象
 				BbscController.assignSamePeriodLastYearValue(table,samePeroidLastYearTable); //对 cell 中的 samePeriodLastYearValue 字段赋值
 
+				/*过滤值全为0的行*/
+				List<ResearchTableRow> rows = table.getRowList();
+				int i = 0;
+				table.setRowList(new ArrayList<ResearchTableRow>()); //置空 table 的 rowList ，在重新赋值筛选过的 row
+				for (int j = 0; j < rows.size(); j++) {
+					List<ResearchTableCell> cellList = new ArrayList<ResearchTableCell>();
+					cellList.addAll(rows.get(j).getValue()); //从 row 拿出 cellList
+					if (hasValue(cellList)) { //如果cell 中有值，则加一行，否则，不加
+						ResearchTableColumn oldRow = rows.get(j).getRowInfo();
+						i++;
+						//建row
+						ResearchTableRow row = new ResearchTableRow();
+						ResearchTableColumn rowAttr = new ResearchTableColumn(i, oldRow.getColName(), oldRow.getLevel());
+						row.setRowInfo(rowAttr);
+						row.setValue(cellList);
+						table.getRowList().add(row);
+					}
+				}
 
 				if(DateUtil.getDiffDays(DateUtil.parse(condition.getJsrq(),
 					DateUtil.webFormat),new Date())!=0){
