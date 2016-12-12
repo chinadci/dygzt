@@ -157,18 +157,19 @@ public class BbscController implements InitializingBean {
         * */
 //        if (po == null) {
             try {
-                ResearchTable table = researchService.createTable(condition); //根据 condtion 来生成 ResearchTable 对象
+                /*根据 condtion 来生成 ResearchTable 对象，该对象保存一个表格生成所需要的所有信息*/
+                ResearchTable table = researchService.createTable(condition);
 
                 BbscConditionVO conditionSPLY = condition;
                  /*获得开始日期和结束日期，并把年数减1*/
                 conditionSPLY.setKsrq(DateUtil.format(DateUtil.addYears((DateUtil.parse(conditionSPLY.getKsrq(), DateUtil.webFormat)), -1), DateUtil.webFormat));
                 conditionSPLY.setJsrq(DateUtil.format(DateUtil.addYears((DateUtil.parse(conditionSPLY.getJsrq(), DateUtil.webFormat)), -1), DateUtil.webFormat));
-
                 ResearchTable samePeroidLastYearTable = researchService.createTable(conditionSPLY);//获得去年同期的 ResearchTable 对象
 
-                assignSamePeriodLastYearValue(table,samePeroidLastYearTable); //个 cell 中的 samePeriodLastYearValue 字段赋值
+                //对 table 中每个 cell 中的 samePeriodLastYearValue 字段赋值
+                assignSamePeriodLastYearValue(table,samePeroidLastYearTable);
 
-
+                /*把 table 对象中 row 集合为空的去除，不把每个 cell 都为 0 的 row 清除*/
                 List<ResearchTableRow> rows = table.getRowList();
                 int i = 0;
                 table.setRowList(new ArrayList<ResearchTableRow>()); //置空 table 的 rowList ，在重新赋值筛选过的 row

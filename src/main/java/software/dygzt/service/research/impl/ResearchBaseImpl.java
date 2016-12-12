@@ -396,7 +396,10 @@ public class ResearchBaseImpl implements ResearchService, InitializingBean {
     }
 
     /**
-     * 查看已有的表(ok)
+     * 根据 tableid 获得已经生成的表格，直接输出(ok)
+     * 1. 根据 tableid 在 DY_AUTO_TABLE 表中获取详细表格生成信息
+     * 2. 再根据 tableid 从 DY_AUTO_CELL 表中取得该tableid 所对应的全部 cell
+     * 3. 转换为 vo
      */
     @Cacheable(cacheName = "AUTO_TABLE_CACHE")
     public ResearchTableVO findSavedTable(int tableid) {
