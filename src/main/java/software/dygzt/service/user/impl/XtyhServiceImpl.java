@@ -37,7 +37,9 @@ public class XtyhServiceImpl implements XtyhService{
 		result.setSuccess(false);
 		DyXtyhDO xtyh = dyXtyhDao.getXtyh(fydm,yhm);
 		/*系统用户表中有该用户：如果是计算人或者管理人权限且密码一致，成功。如果没有这两个权限，则跳转到该用户所在的库，取得系统管理用户表中的用户数据，对比密码，密码一致，则登录成功
-		* 系统用户表中无该用户：直接登录失败，显示无该用户名*/
+		* 系统用户表中无该用户：直接登录失败，显示无该用户名
+		* 这是之前和 PUB_XTGL_YHB 共同进行验证的逻辑，现在调研工作台已经有了独立的用户系统，所以不需要再访问集中库的 PUB_XTGL_YHB 了
+		* */
 
 		if(xtyh!=null){
 			/*在 dyxtyhb 查询到的对象用户有计算人或者管理人的权限，且密码一致，则登录成功，直接跳转
@@ -93,11 +95,25 @@ public class XtyhServiceImpl implements XtyhService{
 //	}
 
 	/**
-	 * 得到法院用户
+	 * 得到调研工作台用户
 	 */
 	public DyXtyhVO getXtyh(String fydm, String yhm) {
 		DyXtyhDO xtyh = dyXtyhDao.getXtyh(fydm,yhm);
 		return Convertor.do2vo(xtyh);
+	}
+
+	/**
+	 * 获取 PUB_XTGL_YHB 中的用户
+	 * */
+	public XtglyhModel getYhByYhm(String yhm) {
+		// TODO Auto-generated method stub
+		List<XtglYhbDO> doList  = xtyhDao.findByYhmc(yhm);//xtyhDao 操作的是 PUB_XTGL_YHB
+		if(doList!=null && doList.size()>0){
+			XtglYhbDO xtglYhbDO = doList.get(0);
+			return Convertor.do2model(xtglYhbDO); //DO 转为简单一点的 model
+		}else{
+			return null;
+		}
 	}
 
 

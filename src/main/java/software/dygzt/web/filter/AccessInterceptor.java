@@ -1,20 +1,13 @@
 package software.dygzt.web.filter;
 
-import java.util.Enumeration;
-import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
-import software.dygzt.util.StringUtil;
 import software.dygzt.dynamicds.CustomerContextHolder;
-import software.dygzt.service.dmb.DmService;
-import software.dygzt.service.dmb.model.DmbModel;
 import software.dygzt.service.share.model.ContextHolder;
 import software.dygzt.service.user.model.UserContextModel;
 

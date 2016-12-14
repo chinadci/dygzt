@@ -77,6 +77,13 @@ public class ResearchTableCell {
 
     }
 
+
+    public double getSamePeriodLastYearDoubleValue() {
+        return this.samePeriodLastYearValue;
+    }
+
+
+
     public void setLastPeriod(Double lastPeriod) {
         this.lastPeriod = lastPeriod;
     }

@@ -778,7 +778,7 @@ s.ok {
 
 .samePeriodLastYear{
 	display: inline-block;
-	margin-left: 5px;
+	margin-left: 0px;
 	color: #B6B6B6;
-    background-color: #F6F6F6;
+    /*background-color: #F6F6F6;*/
 }

@@ -1,13 +1,14 @@
 package software.dygzt.service.user;
 
-import java.util.List;
-
 import software.dygzt.service.user.model.BmVO;
 import software.dygzt.service.user.model.DyXtyhVO;
 import software.dygzt.service.user.model.UserCheckResult;
+import software.dygzt.service.user.model.XtglyhModel;
+
+import java.util.List;
 
 public interface XtyhService {
-	
+
 	public UserCheckResult getXtyh(String fydm, String yhm, String password);
 	/**
 	 * 根据法院和用户名得到用户
@@ -51,8 +52,8 @@ public interface XtyhService {
 	public String changeLxfs(String phone,String lxfs);
 	/**
 	 * 修改密码
-	 * @param 
-	 * @param 
+	 * @param
+	 * @param
 	 * @return
 	 */
 	public String changePassword(String oldPass,String newPass);
@@ -62,4 +63,10 @@ public interface XtyhService {
 	 * @return
 	 */
 	public List<BmVO> getAllXtyh(String fydm);
+
+
+	/**
+	 * 获取 PUB_XTGL_YHB 中的用户
+	 * */
+	public XtglyhModel getYhByYhm(String yhm);
 }

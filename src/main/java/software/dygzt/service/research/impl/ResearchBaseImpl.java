@@ -219,6 +219,7 @@ public class ResearchBaseImpl implements ResearchService, InitializingBean {
     @Transactional(propagation = Propagation.REQUIRED)
     public int saveTable(int tableid, ResearchTable table, int type) {
         ResearchTableDO po = findTable(table.getDytj());
+        /*如果之前有该调研条件的表格生成，则不重复保存*/
         if (po == null) {
             ResearchTableDO tabledo = new ResearchTableDO();
             long maxid;
@@ -411,7 +412,7 @@ public class ResearchBaseImpl implements ResearchService, InitializingBean {
     }
 
     /**
-     * 寻找是否有已生成的表(ok)
+     * 根据调研条件去 DY_AUTO_TABLE 寻找是否有已生成的表(ok)
      */
     public ResearchTableDO findTable(String dytj) {
         return researchTableDao.findByDytj(dytj);

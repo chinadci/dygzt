@@ -24,11 +24,11 @@
             </tr>
         </c:forEach>
 
-        <c:forEach var="j" begin="${table.collevel }" end="${table.valueList.size()-1 }" step="1">
+        <c:forEach var="j" begin="${table.collevel }" end="${table.valueList.size()-1 }" step="1" varStatus="rowIndex">
             <tr>
-                <c:forEach items="${table.valueList.get(j)}" var="cell" varStatus="rowindex">
+                <c:forEach items="${table.valueList.get(j)}" var="cell" varStatus="cellIndex">
                     <td rowspan="${cell.rowspan}" colspan="${cell.colspan}"
-                        <c:if test="${rowindex.index<table.rowlevel}">class="rowheader"</c:if>>
+                        <c:if test="${cellIndex.index<table.rowlevel}">class="rowheader"</c:if>>
                             <%--<!-- ${cell.value}-->--%>
 
                         <c:choose>
@@ -38,17 +38,83 @@
                                    target="_blank">
                                         ${cell.value}
                                 </a>
-                                <label class="samePeriodLastYear" id="samePeriodLastYear">
-                                        <%--同比增长速度=（本期发展水平-去年同期水平）/去年同期水平×100%--%>
-                                    [${cell.samePeriodLastYearValue}]
-                                </label>
+                                <%--该值的显示方式要判断--%>
+                                <c:choose>
+                                    <c:when test="${cell.samePeriodLastYearValue != null}">
+                                     <%--   <label class="samePeriodLastYear" id="samePeriodLastYear">
+                                            [${cell.samePeriodLastYearValue}]
+                                            <c:set var="thisValue" value="${cell.value}" />
+                                            <c:set var="lastValue" value="${cell.samePeriodLastYearValue}" />
+                                            <fmt:formatNumber var="intVar3" type="percent" maxFractionDigits="2"  value="${(thisValue-lastValue)/lastValue}" />
+                                            [${intVar3}]
+                                        </label>
+--%>
+
+
+                                        <label class="samePeriodLastYear" id="samePeriodLastYear">
+                                            [${cell.samePeriodLastYearValue}]
+                                            <c:choose>
+                                                <c:when test="${cell.value == 0 && cell.samePeriodLastYearValue ==0}">
+                                                    <%--如果分子分母都为0那么不出输出同比--%>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <c:set var="thisValue" value="${cell.value}"/>
+                                                    <c:set var="lastValue" value="${cell.samePeriodLastYearValue}"/>
+                                                    <fmt:formatNumber var="intVar3" type="percent"
+                                                                      maxFractionDigits="2"
+                                                                      value="${(thisValue-lastValue)/lastValue}"/>
+                                                    [${intVar3}]
+                                                </c:otherwise>
+
+                                            </c:choose>
+
+                                        </label>
+
+
+
+
+                                        <%--<fmt:parseNumber var="intVar4" integerOnly="true" value="${intVar1/intVar2}" /> //1--%>
+
+                                    </c:when>
+                                </c:choose>
                             </c:when>
+
                             <c:otherwise>
                                 ${cell.value}
-                                <label class="samePeriodLastYear" id="samePeriodLastYear">
-                                        ${cell.samePeriodLastYearValue}
-                                </label>
+                                <%--该值的显示方式要判断--%>
+                                <c:choose>
+                                    <c:when test="${cell.samePeriodLastYearValue != null}">
+                                       <%-- <label class="samePeriodLastYear" id="samePeriodLastYear">
+                                            [${cell.samePeriodLastYearValue}]
+                                            <c:set var="thisValue" value="${cell.value}" />
+                                            <c:set var="lastValue" value="${cell.samePeriodLastYearValue}" />
+                                            <fmt:formatNumber var="intVar3" type="percent" maxFractionDigits="2"  value="${(thisValue-lastValue)/lastValue}" />
+                                            [${intVar3}]
+                                        </label>--%>
+
+                                        <label class="samePeriodLastYear" id="samePeriodLastYear">
+                                            [${cell.samePeriodLastYearValue}]
+                                            <c:choose>
+                                                <c:when test="${cell.value == 0 && cell.samePeriodLastYearValue ==0}">
+                                                    <%--如果分子分母都为0那么不出输出同比--%>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <c:set var="thisValue" value="${cell.value}"/>
+                                                    <c:set var="lastValue" value="${cell.samePeriodLastYearValue}"/>
+                                                    <fmt:formatNumber var="intVar3" type="percent"
+                                                                      maxFractionDigits="2"
+                                                                      value="${(thisValue-lastValue)/lastValue}"/>
+                                                    [${intVar3}]
+                                                </c:otherwise>
+
+                                            </c:choose>
+
+                                        </label>
+
+                                    </c:when>
+                                </c:choose>
                             </c:otherwise>
+
                         </c:choose>
 
                     </td>

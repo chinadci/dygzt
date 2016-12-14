@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import software.dygzt.data.user.dataobject.XtglYhbDO;
 import software.dygzt.service.aj.model.AjjbModel;
 import software.dygzt.service.ajlx.model.AjlxVO;
 import software.dygzt.service.bm.model.BmModel;
@@ -28,6 +29,7 @@ import software.dygzt.service.research.model.ResearchXXZBModel;
 import software.dygzt.service.share.model.ExcelCell;
 import software.dygzt.service.user.model.BmVO;
 import software.dygzt.service.user.model.DyXtyhVO;
+import software.dygzt.service.user.model.XtglyhModel;
 import software.dygzt.util.DateUtil;
 import software.dygzt.util.StringUtil;
 import software.dygzt.data.aj.dataobject.AjjbDO;
@@ -77,6 +79,27 @@ public class Convertor {
         }
         return manualdo;
     }
+
+
+
+
+    /**
+     * XtglYhbDO 转 XtglyhModel
+     * */
+    public static XtglyhModel do2model(XtglYhbDO xtglYhbDO){
+        XtglyhModel xtglyhModel = null;
+        if(xtglYhbDO != null){
+            xtglyhModel = new XtglyhModel();
+            xtglyhModel.setYhmc(xtglYhbDO.getYhmc());
+            xtglyhModel.setYhbm(xtglYhbDO.getYhbm());
+            xtglyhModel.setYhsf(xtglYhbDO.getYhsf());
+            xtglyhModel.setYhkl(xtglYhbDO.getYhkl());
+            return xtglyhModel;
+        }
+        return null;
+    }
+
+
 
     /**
      * 调研用户vo转do

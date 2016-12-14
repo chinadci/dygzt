@@ -45,7 +45,7 @@
 		</div>
 	</div>
 	<script type="text/javascript">
-		max_body();
+//		max_body();
 	</script>
 	<script src="resources/js/xzfy.js"  type="text/javascript"></script>
 	<script src="resources/js/login.js"  type="text/javascript"></script>

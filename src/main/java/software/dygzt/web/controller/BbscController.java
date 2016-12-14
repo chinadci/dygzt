@@ -128,13 +128,30 @@ public class BbscController implements InitializingBean {
     public boolean hasValue(List<ResearchTableCell> list) {
         boolean hasNum = false;
         for (ResearchTableCell cell : list) {
-            if (cell.getValueDouble() != 0) {
+            if (cell.getValueDouble() != 0 || cell.getSamePeriodLastYearDoubleValue() != 0) {
                 hasNum = true;
                 break;
             }
         }
         return hasNum;
     }
+
+
+    public boolean hasValueVO(List<ResearchTableCellVO> list) {
+        boolean hasNum = false;
+        for (ResearchTableCellVO cell : list) {
+            if ((cell.getValue() != null && Integer.parseInt(cell.getValue()) != 0) || (cell.getSamePeriodLastYearValue() != null && Integer.parseInt(cell.getSamePeriodLastYearValue()) != 0) ) {
+                hasNum = true;
+                break;
+            }
+        }
+        return hasNum;
+    }
+
+
+
+
+
 
     /**
      * 生成报表函数(ok)
@@ -149,53 +166,48 @@ public class BbscController implements InitializingBean {
         condition.setBblx(bblx);
         //因为使用 factory 实现的,factory 通过键值对的形式保存 ResearchVariableService 接口的 Imply 实体对象,作用根据为不同的报表类型来创建表。
         ResearchVariableService researchService = factory.getServiceByName(condition.getBblx());
+
+        BbscConditionVO conditionSPLY = (BbscConditionVO) condition.clone(); //克隆一个新的 condition
+
+        /*获得开始日期和结束日期，并把年数减1*/
+        conditionSPLY.setKsrq(DateUtil.format(DateUtil.addYears((DateUtil.parse(conditionSPLY.getKsrq(), DateUtil.webFormat)), -1), DateUtil.webFormat));
+        conditionSPLY.setJsrq(DateUtil.format(DateUtil.addYears((DateUtil.parse(conditionSPLY.getJsrq(), DateUtil.webFormat)), -1), DateUtil.webFormat));
+
         //根据表格筛选的条件，判断表格是否生成过。
         ResearchTableDO po = researchBaseImpl.findTable(condition.toString());
+        //根据表格筛选的条件，判断去年同期条件下的表格是否生成过。
+        ResearchTableDO poSamePeriodLastYear = researchBaseImpl.findTable(conditionSPLY.toString());
 
         /*如果没生成过,则根据查询条件 conditon 去数据库中查询，把结果放在 ResearchTable 对象中
-        * 先把优化去除
+        * 只要有一个为空，则重新生成
+        * 优化比较难做
         * */
-//        if (po == null) {
+//        if (po == null || poSamePeriodLastYear == null) {
             try {
                 /*根据 condtion 来生成 ResearchTable 对象，该对象保存一个表格生成所需要的所有信息*/
                 ResearchTable table = researchService.createTable(condition);
-
-                BbscConditionVO conditionSPLY = condition;
-                 /*获得开始日期和结束日期，并把年数减1*/
-                conditionSPLY.setKsrq(DateUtil.format(DateUtil.addYears((DateUtil.parse(conditionSPLY.getKsrq(), DateUtil.webFormat)), -1), DateUtil.webFormat));
-                conditionSPLY.setJsrq(DateUtil.format(DateUtil.addYears((DateUtil.parse(conditionSPLY.getJsrq(), DateUtil.webFormat)), -1), DateUtil.webFormat));
                 ResearchTable samePeroidLastYearTable = researchService.createTable(conditionSPLY);//获得去年同期的 ResearchTable 对象
 
                 //对 table 中每个 cell 中的 samePeriodLastYearValue 字段赋值
-                assignSamePeriodLastYearValue(table,samePeroidLastYearTable);
+                assignSamePeriodLastYearValue(table, samePeroidLastYearTable);
 
-                /*把 table 对象中 row 集合为空的去除，不把每个 cell 都为 0 的 row 清除*/
-                List<ResearchTableRow> rows = table.getRowList();
-                int i = 0;
-                table.setRowList(new ArrayList<ResearchTableRow>()); //置空 table 的 rowList ，在重新赋值筛选过的 row
-                for (int j = 0; j < rows.size(); j++) {
-                    List<ResearchTableCell> cellList = new ArrayList<ResearchTableCell>();
-                    cellList.addAll(rows.get(j).getValue()); //从 row 拿出 cellList
-                    if (hasValue(cellList)) { //如果cell 中有值，则加一行，否则，不加
-                        ResearchTableColumn oldRow = rows.get(j).getRowInfo();
-                        i++;
-                        //建row
-                        ResearchTableRow row = new ResearchTableRow();
-                        ResearchTableColumn rowAttr = new ResearchTableColumn(i, oldRow.getColName(), oldRow.getLevel());
-                        row.setRowInfo(rowAttr);
-                        row.setValue(cellList);
-                        table.getRowList().add(row);
-                    }
-                }
-
+                /*把 table 中的空行去除后，再开一个线程把数据保存到数据库中的表中，存入的表无论是否为空行，都保存，如果先去空行，再保存，那么同比则不能优化*/
                 if (DateUtil.getDiffDays(DateUtil.parse(condition.getJsrq(), DateUtil.webFormat), new Date()) != 0) {
                     Runnable r = new SaveThread(table, -1, 2);
+                    Runnable rSPLY = new SaveThread(samePeroidLastYearTable, -1, 2);
                     Thread t = new Thread(r);
+                    Thread tSPLY = new Thread(rSPLY);
                     t.start();
+                    /*先不保存去年同期的表格*/
+//                    tSPLY.start();
                 }
 
+                /*把 table  对象中零行清空*/
+                deleteNullRow(table);
+
                 /*传递的 Model 会先转为 VO 对象，方便进行渲染*/
-                model.addAttribute("table", Convertor.model2vo(table));//返回到前台页面的是 ResearchTableVO 对象。
+                ResearchTableVO researchTableVO = Convertor.model2vo(table);
+                model.addAttribute("table", researchTableVO);//返回到前台页面的是 ResearchTableVO 对象。
                 //model.addAttribute("samePeroidLastYearTable", Convertor.model2vo(samePeroidLastYearTable));//把 samePeroidLastYearTable 返回
                 return success_jsp;
             } catch (Exception e) {
@@ -203,7 +215,7 @@ public class BbscController implements InitializingBean {
                 model.addAttribute("error", e.getMessage());
                 return error_jsp;
             }
-       /* } else if (StringUtil.isNotBlank(po.getSbfy())) {    //生成失败过
+        /*} else if (StringUtil.isNotBlank(po.getSbfy())) {    //生成失败过
             String fylist[] = po.getSbfy().split(";");
             boolean connect = false;
             String curDb = CustomerContextHolder.getCustomerType();
@@ -237,28 +249,73 @@ public class BbscController implements InitializingBean {
             } else {
                 model.addAttribute("table", researchBaseImpl.findSavedTable(po.getId()));
                 return success_jsp;
-            }
-        } else { //已经生产过
-            model.addAttribute("table", researchBaseImpl.findSavedTable(po.getId()));
+            }*/
+        /*} else { //已经生成过
+
+            ResearchTableVO researchTableVO = researchBaseImpl.findSavedTable(po.getId());
+            ResearchTableVO researchTableVOSPLY = researchBaseImpl.findSavedTable(poSamePeriodLastYear.getId());
+            *//*设置 table 中 samePeroidLastYear 字段的值*//*
+            assignSamePeriodLastYearValue(researchTableVO, researchTableVOSPLY);
+//            deleteNullRow(researchTableVO);
+            model.addAttribute("table", researchTableVO);
             return success_jsp;
         }*/
     }
 
 
+
+    public void deleteNullRow(ResearchTable table) {
+        /*把 table 对象中 row 集合为空的去除，不把每个 cell 都为 0 的 row 清除*/
+        List<ResearchTableRow> rows = table.getRowList();
+        int i = 0;
+        table.setRowList(new ArrayList<ResearchTableRow>()); //置空 table 的 rowList ，在重新赋值筛选过的 row
+        for (int j = 0; j < rows.size(); j++) {
+            List<ResearchTableCell> cellList = new ArrayList<ResearchTableCell>();
+            cellList.addAll(rows.get(j).getValue()); //从 row 拿出 cellList
+            if (hasValue(cellList)) { //如果cell 中有值，则加一行，否则，不加
+                ResearchTableColumn oldRow = rows.get(j).getRowInfo();
+                i++;
+                //建row
+                ResearchTableRow row = new ResearchTableRow();
+                ResearchTableColumn rowAttr = new ResearchTableColumn(i, oldRow.getColName(), oldRow.getLevel());
+                row.setRowInfo(rowAttr);
+                row.setValue(cellList);
+                table.getRowList().add(row);
+            }
+        }
+    }
+
+
+    public void deleteNullRow(ResearchTableVO table) {
+        /*把 table 对象中 row 集合为空的去除，不把每个 cell 都为 0 的 row 清除*/
+        List<List<ResearchTableCellVO>> rows = table.getValueList();
+        int i = 0;
+        table.setValueList(new ArrayList<List<ResearchTableCellVO>>()); //置空 table 的 rowList ，在重新赋值筛选过的 row
+        for (int j = 0; j < rows.size(); j++) {
+            List<ResearchTableCellVO> cellList = new ArrayList<ResearchTableCellVO>();
+            cellList.addAll(rows.get(j)); //从 row 拿出 cellList
+
+            if (hasValueVO(cellList)) { //如果 cell 集合中有值，则加一行，否则，不加
+                table.getValueList().add(cellList);
+            }
+        }
+
+    }
+
+
+
     /**
-     *
      * 为了实现同比，在后台就把需要的数据初始化，放在 cell 中
      * 把 samePeroidLastYearTable 中的value 赋值给 table 中的 samePeriodLastYearValue
      * 循环复制即可，循环复制常州出现错误，因为去年同期和现在的table 的rowList 的行数出现了不一致。
      * 如果今年的行数比如年少，则不会出现运行时错误，否则运行会出错
-     *
-     * */
-    public static void assignSamePeriodLastYearValue(ResearchTable table,ResearchTable samePeroidLastYearTable){
+     */
+    public static void assignSamePeriodLastYearValue(ResearchTable table, ResearchTable samePeroidLastYearTable) {
         /*对table 中每个 ResearchTableCell cell 中的其他字段进行赋值*/
         List<ResearchTableRow> rowList = table.getRowList(); //取得行集合
         List<ResearchTableRow> rowListSPLY = samePeroidLastYearTable.getRowList(); //取得行集合
 
-        if(table.getRowList().size() == samePeroidLastYearTable.getRowList().size()){
+        if (table.getRowList().size() == samePeroidLastYearTable.getRowList().size()) {
             for (int i = 0; i < rowList.size(); i++) {
                 ResearchTableRow researchTableRow = rowList.get(i);
                 ResearchTableRow researchTableRowSPLY = rowListSPLY.get(i);
@@ -270,10 +327,42 @@ public class BbscController implements InitializingBean {
                     researchTableCellList.get(j).setSamePeriodLastYearValue(Double.valueOf(samePeriodLastYear));
                 }
             }
-        }else{
+        } else {
             //不对 table 中每个 cell 中的 samePeriodLastYearValue 赋值
         }
     }
+
+
+    /**
+     * 为了实现同比，在后台就把需要的数据初始化，放在 cell 中
+     * 把 samePeroidLastYearTable 中的value 赋值给 table 中的 samePeriodLastYearValue
+     * 循环复制即可，循环复制常州出现错误，因为去年同期和现在的table 的rowList 的行数出现了不一致。
+     * 如果今年的行数比如年少，则不会出现运行时错误，否则运行会出错
+     */
+    public static void assignSamePeriodLastYearValue(ResearchTableVO table, ResearchTableVO samePeroidLastYearTable) {
+        /*对table 中每个 ResearchTableCell cell 中的其他字段进行赋值*/
+        List<List<ResearchTableCellVO>> rowList = table.getValueList();
+        List<List<ResearchTableCellVO>> rowListSPLY = samePeroidLastYearTable.getValueList();
+
+        if (rowList.size() == rowListSPLY.size()) {
+            for (int i = 0; i < rowList.size(); i++) {
+                List<ResearchTableCellVO> cellVOs = rowList.get(i);
+                List<ResearchTableCellVO> cellVOsSPLY = rowListSPLY.get(i);
+
+                if (cellVOs.size() == cellVOsSPLY.size()) {
+
+                    for (int j = 0; j < cellVOs.size(); j++) {
+                        String samePeriodLastYear = cellVOsSPLY.get(j).getValue();
+                        cellVOs.get(j).setSamePeriodLastYearValue(samePeriodLastYear);
+                    }
+                }
+            }
+        } else {
+            //不对 table 中每个 cell 中的 samePeriodLastYearValue 赋值
+        }
+
+    }
+
 
     /**
      * 显示我的模板列表
@@ -580,6 +669,7 @@ public class BbscController implements InitializingBean {
         DataTablePageUtil.search_sort_page(vos, pagedVO, null, sortHeader, response);
     }
 
+    /*保存报表的线程*/
     class SaveThread implements Runnable {
 
         private ResearchTable table;
