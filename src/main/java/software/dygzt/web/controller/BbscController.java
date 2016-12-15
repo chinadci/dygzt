@@ -25,10 +25,8 @@ import software.dygzt.service.research.ResearchVariableFactory;
 import software.dygzt.service.research.ResearchVariableService;
 import software.dygzt.service.research.model.*;
 import software.dygzt.service.share.Convertor;
-import software.dygzt.service.share.model.ChartDataVO;
-import software.dygzt.service.share.model.ChartSeriesVO;
-import software.dygzt.service.share.model.ContextHolder;
-import software.dygzt.service.share.model.DatatablesPagedVO;
+import software.dygzt.service.share.SjjzBdService;
+import software.dygzt.service.share.model.*;
 import software.dygzt.service.user.XtyhService;
 import software.dygzt.service.user.model.DyXtyhVO;
 import software.dygzt.service.user.model.UserContextModel;
@@ -54,6 +52,9 @@ public class BbscController implements InitializingBean {
     private DyDmbDao dydmbDao;
     @Autowired
     private XtyhService xtyhService;//用户管理service
+    @Autowired
+    private SjjzBdService sjjzBdServiceImpl; //计算置信度相关 service
+
 
     //在 afterPropertiesSet 方法中进行初始化的
     private Map<String, String> databaseMap = new HashMap<String, String>();
@@ -84,7 +85,6 @@ public class BbscController implements InitializingBean {
 
     /**
      * 自定义报表生成,BbscConditionVO condition 对象会根据前端页面传来的值进行自动匹配,字段一样的会 new 一个对象并自动复值。
-     *
      * @param request
      * @param response
      * @param model
@@ -94,6 +94,33 @@ public class BbscController implements InitializingBean {
     @RequestMapping(value = "/bbscCustom.aj", method = RequestMethod.POST)
     public String show(HttpServletRequest request,
                        HttpServletResponse response, ModelMap model, BbscConditionVO condition) {
+
+        List<String> fybhList = new ArrayList();
+        String fyfw = condition.getFyfw();
+        /*根据法院访问获取相应的法院编号*/
+        List<FYDataSourceEnum> dataSources = FYDataSourceEnum.getFyDataSourceList(condition.getFyfw());
+        for (FYDataSourceEnum item : dataSources) {
+            fybhList.add(String.valueOf(item.getFybh()));
+        }
+
+        /*切换数据库到集中融合库*/
+        String curDb = CustomerContextHolder.getCustomerType();
+        DataSourceRouter.routerToJzrh();
+
+        /*根据要查询的法院编号 List 去集中融合库中取每家 fybh 所对应的统计数据*/
+        List<SjjzBdModel> sjjzBdModelList = sjjzBdServiceImpl.getSjjzBdB(fybhList, condition.getKsrq(), condition.getJsrq());
+        DataSourceRouter.routerTo(curDb);//输出获取完之后，立即切换原数据库
+
+        /*conditon 中 bblx 是值统计的是案由还是部门还是法院，yjCondition:ajzt/新收+ajzt/旧存 才指要统计新收，旧存，已结，还是未结*/
+        String[] ajztArray = condition.getYjCondition().split("\\+");
+
+        /*把获得的各家法院的数据先全部加起来*/
+        SjjzBdModel sjjzBdModelOfAllSelectFY = sjjzBdServiceImpl.getSjjzBdModelOfAllSelectFY(sjjzBdModelList);
+
+        /*一个 yjConditon 可能要计算多个案件状态的数据*/
+        CreditNumVO creditNumVO = sjjzBdServiceImpl.calculateCredit(sjjzBdModelOfAllSelectFY, ajztArray);
+        model.addAttribute("credit", creditNumVO);
+
         return createTable(condition, model, "pop/researchTable", "inc/error.inc");
     }
 
@@ -118,11 +145,37 @@ public class BbscController implements InitializingBean {
                 DateUtil.webFormat), new Date()) != 0) {
             model.addAttribute("hasHistory", true);    //	截止日期不为今天，才可以保存
         }
+
+
+        List<String> fybhList = new ArrayList();
+        String fyfw = condition.getFyfw();
+        /*根据法院访问获取相应的法院编号*/
+        List<FYDataSourceEnum> dataSources = FYDataSourceEnum.getFyDataSourceList(condition.getFyfw());
+        for (FYDataSourceEnum item : dataSources) {
+            fybhList.add(String.valueOf(item.getFybh()));
+        }
+
+        /*切换数据库到集中融合库*/
+        String curDb = CustomerContextHolder.getCustomerType();
+        DataSourceRouter.routerToJzrh();
+
+        /*根据要查询的法院编号 List 去集中融合库中取每家 fybh 所对应的统计数据*/
+        List<SjjzBdModel> sjjzBdModelList = sjjzBdServiceImpl.getSjjzBdB(fybhList, condition.getKsrq(), condition.getJsrq());
+        DataSourceRouter.routerTo(curDb);//输出获取完之后，立即切换原数据库
+
+        /*conditon 中 bblx 是值统计的是案由还是部门还是法院，yjCondition:ajzt/新收+ajzt/旧存 才指要统计新收，旧存，已结，还是未结*/
+        String[] ajztArray = condition.getYjCondition().split("\\+");
+
+        /*把获得的各家法院的数据先全部加起来*/
+        SjjzBdModel sjjzBdModelOfAllSelectFY = sjjzBdServiceImpl.getSjjzBdModelOfAllSelectFY(sjjzBdModelList);
+
+        /*一个 yjConditon 可能要计算多个案件状态的数据*/
+        CreditNumVO creditNumVO = sjjzBdServiceImpl.calculateCredit(sjjzBdModelOfAllSelectFY, ajztArray);
+        model.addAttribute("credit", creditNumVO);
+
+
         return createTable(condition, model, "historyAutoTable", "error");
     }
-
-
-
 
 
     public boolean hasValue(List<ResearchTableCell> list) {
@@ -140,17 +193,13 @@ public class BbscController implements InitializingBean {
     public boolean hasValueVO(List<ResearchTableCellVO> list) {
         boolean hasNum = false;
         for (ResearchTableCellVO cell : list) {
-            if ((cell.getValue() != null && Integer.parseInt(cell.getValue()) != 0) || (cell.getSamePeriodLastYearValue() != null && Integer.parseInt(cell.getSamePeriodLastYearValue()) != 0) ) {
+            if ((cell.getValue() != null && Integer.parseInt(cell.getValue()) != 0) || (cell.getSamePeriodLastYearValue() != null && Integer.parseInt(cell.getSamePeriodLastYearValue()) != 0)) {
                 hasNum = true;
                 break;
             }
         }
         return hasNum;
     }
-
-
-
-
 
 
     /**
@@ -183,38 +232,38 @@ public class BbscController implements InitializingBean {
         * 优化比较难做
         * */
 //        if (po == null || poSamePeriodLastYear == null) {
-            try {
+        try {
                 /*根据 condtion 来生成 ResearchTable 对象，该对象保存一个表格生成所需要的所有信息*/
-                ResearchTable table = researchService.createTable(condition);
-                ResearchTable samePeroidLastYearTable = researchService.createTable(conditionSPLY);//获得去年同期的 ResearchTable 对象
+            ResearchTable table = researchService.createTable(condition);
+            ResearchTable samePeroidLastYearTable = researchService.createTable(conditionSPLY);//获得去年同期的 ResearchTable 对象
 
-                //对 table 中每个 cell 中的 samePeriodLastYearValue 字段赋值
-                assignSamePeriodLastYearValue(table, samePeroidLastYearTable);
+            //对 table 中每个 cell 中的 samePeriodLastYearValue 字段赋值
+            assignSamePeriodLastYearValue(table, samePeroidLastYearTable);
 
                 /*把 table 中的空行去除后，再开一个线程把数据保存到数据库中的表中，存入的表无论是否为空行，都保存，如果先去空行，再保存，那么同比则不能优化*/
-                if (DateUtil.getDiffDays(DateUtil.parse(condition.getJsrq(), DateUtil.webFormat), new Date()) != 0) {
-                    Runnable r = new SaveThread(table, -1, 2);
-                    Runnable rSPLY = new SaveThread(samePeroidLastYearTable, -1, 2);
-                    Thread t = new Thread(r);
-                    Thread tSPLY = new Thread(rSPLY);
-                    t.start();
+            if (DateUtil.getDiffDays(DateUtil.parse(condition.getJsrq(), DateUtil.webFormat), new Date()) != 0) {
+                Runnable r = new SaveThread(table, -1, 2);
+                Runnable rSPLY = new SaveThread(samePeroidLastYearTable, -1, 2);
+                Thread t = new Thread(r);
+                Thread tSPLY = new Thread(rSPLY);
+                t.start();
                     /*先不保存去年同期的表格*/
 //                    tSPLY.start();
-                }
+            }
 
                 /*把 table  对象中零行清空*/
-                deleteNullRow(table);
+            deleteNullRow(table);
 
                 /*传递的 Model 会先转为 VO 对象，方便进行渲染*/
-                ResearchTableVO researchTableVO = Convertor.model2vo(table);
-                model.addAttribute("table", researchTableVO);//返回到前台页面的是 ResearchTableVO 对象。
-                //model.addAttribute("samePeroidLastYearTable", Convertor.model2vo(samePeroidLastYearTable));//把 samePeroidLastYearTable 返回
-                return success_jsp;
-            } catch (Exception e) {
-                logger.error("生成表格错误：", e);
-                model.addAttribute("error", e.getMessage());
-                return error_jsp;
-            }
+            ResearchTableVO researchTableVO = Convertor.model2vo(table);
+            model.addAttribute("table", researchTableVO);//返回到前台页面的是 ResearchTableVO 对象。
+            //model.addAttribute("samePeroidLastYearTable", Convertor.model2vo(samePeroidLastYearTable));//把 samePeroidLastYearTable 返回
+            return success_jsp;
+        } catch (Exception e) {
+            logger.error("生成表格错误：", e);
+            model.addAttribute("error", e.getMessage());
+            return error_jsp;
+        }
         /*} else if (StringUtil.isNotBlank(po.getSbfy())) {    //生成失败过
             String fylist[] = po.getSbfy().split(";");
             boolean connect = false;
@@ -263,7 +312,6 @@ public class BbscController implements InitializingBean {
     }
 
 
-
     public void deleteNullRow(ResearchTable table) {
         /*把 table 对象中 row 集合为空的去除，不把每个 cell 都为 0 的 row 清除*/
         List<ResearchTableRow> rows = table.getRowList();
@@ -301,7 +349,6 @@ public class BbscController implements InitializingBean {
         }
 
     }
-
 
 
     /**

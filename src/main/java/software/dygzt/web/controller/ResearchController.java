@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import software.dygzt.data.dmb.dao.DyDmbDao;
 import software.dygzt.data.dmb.dataobject.DyDmbDO;
 import software.dygzt.data.research.dataobject.ResearchTableDO;
+import software.dygzt.dynamicds.CustomerContextHolder;
+import software.dygzt.dynamicds.DataSourceRouter;
 import software.dygzt.dynamicds.FYDataSourceEnum;
 import software.dygzt.service.dmb.model.DmVO;
 import software.dygzt.service.fy.FyService;
@@ -20,10 +22,8 @@ import software.dygzt.service.research.ResearchVariableFactory;
 import software.dygzt.service.research.ResearchVariableService;
 import software.dygzt.service.research.model.*;
 import software.dygzt.service.share.Convertor;
-import software.dygzt.service.share.model.ChartDataVO;
-import software.dygzt.service.share.model.ChartSeriesVO;
-import software.dygzt.service.share.model.ContextHolder;
-import software.dygzt.service.share.model.DatatablesPagedVO;
+import software.dygzt.service.share.SjjzBdService;
+import software.dygzt.service.share.model.*;
 import software.dygzt.service.user.model.UserContextModel;
 import software.dygzt.util.*;
 import software.dygzt.web.ResponseBuilder;
@@ -46,6 +46,8 @@ public class ResearchController implements InitializingBean{
 	private FyService fyServiceImpl;
 	@Autowired
 	private DyDmbDao dydmbDao;
+	@Autowired
+	private SjjzBdService sjjzBdServiceImpl; //计算置信度相关 service
 	
 	private Map<String,String> databaseMap = new HashMap<String,String>();
 	
@@ -124,6 +126,34 @@ public class ResearchController implements InitializingBean{
 	public String show(HttpServletRequest request,
 			HttpServletResponse response, ModelMap model,
 			ResearchConditionVO condition, BindingResult result) {
+
+
+		List<String> fybhList = new ArrayList();
+		String fyfw = condition.getFyfw();
+        /*根据法院访问获取相应的法院编号*/
+		List<FYDataSourceEnum> dataSources = FYDataSourceEnum.getFyDataSourceList(condition.getFyfw());
+		for (FYDataSourceEnum item : dataSources) {
+			fybhList.add(String.valueOf(item.getFybh()));
+		}
+
+        /*切换数据库到集中融合库*/
+		String curDb = CustomerContextHolder.getCustomerType();
+		DataSourceRouter.routerToJzrh();
+
+        /*根据要查询的法院编号 List 去集中融合库中取每家 fybh 所对应的统计数据*/
+		List<SjjzBdModel> sjjzBdModelList = sjjzBdServiceImpl.getSjjzBdB(fybhList, condition.getKsrq(), condition.getJsrq());
+		DataSourceRouter.routerTo(curDb);//输出获取完之后，立即切换原数据库
+
+        /*conditon 中 bblx 是值统计的是案由还是部门还是法院，yjCondition:ajzt/新收+ajzt/旧存 才指要统计新收，旧存，已结，还是未结*/
+		String[] ajztArray = new String[]{condition.getCondition()};
+
+        /*把获得的各家法院的数据先全部加起来*/
+		SjjzBdModel sjjzBdModelOfAllSelectFY = sjjzBdServiceImpl.getSjjzBdModelOfAllSelectFY(sjjzBdModelList);
+
+        /*一个 yjConditon 可能要计算多个案件状态的数据*/
+		CreditNumVO creditNumVO = sjjzBdServiceImpl.calculateCredit(sjjzBdModelOfAllSelectFY, ajztArray);
+		model.addAttribute("credit", creditNumVO);
+
 		String bblx = databaseMap.get(condition.getBblx());
 		condition.setBblx(bblx);
 		ResearchVariableService researchService = factory.getServiceByName(condition.getBblx());

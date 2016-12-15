@@ -27,6 +27,57 @@
 						<a href="tableExport.aj?dytj=${table.dytj.replace('+','%2B') }">导出</a>
 					</span>
             </h3>
+
+            <h3 class="creditH3">
+                <c:choose>
+                    <c:when test="${credit.XSCredit} == 0.0">
+                        <label class="credit">暂无新收置信度</label>
+                    </c:when>
+                    <c:otherwise>
+                        <label class="credit">
+                            <fmt:formatNumber var="XSCredit" type="percent" maxFractionDigits="2" value="${credit.XSCredit}"/>
+                            新收置信度: [${XSCredit}]
+                        </label>
+                    </c:otherwise>
+                </c:choose>
+
+
+                <c:choose>
+                    <c:when test="${credit.WJcredit} == 0.0">
+                        <label class="credit">暂无未结置信度</label>
+                    </c:when>
+                    <c:otherwise>
+                        <label class="credit">
+                            <fmt:formatNumber var="WJcredit" type="percent" maxFractionDigits="2" value="${credit.WJcredit}"/>
+                            未结置信度: [${WJcredit}]
+                        </label>
+                    </c:otherwise>
+                </c:choose>
+
+                <c:choose>
+                    <c:when test="${credit.YJCredit} == 0.0">
+                        <label class="credit"> 暂无已结置信度</label>
+                    </c:when>
+                    <c:otherwise>
+                        <label class="credit">
+                            <fmt:formatNumber var="YJCredit" type="percent" maxFractionDigits="2" value="${credit.YJCredit}"/>
+                            已结置信度: [${YJCredit}]
+                        </label>
+                    </c:otherwise>
+                </c:choose>
+                <c:choose>
+                    <c:when test="${credit.JCCredit} == 0.0">
+                        <label class="credit">暂无旧存信度</label>
+                    </c:when>
+                    <c:otherwise>
+                        <label class="credit">
+                            <fmt:formatNumber var="JCCredit" type="percent" maxFractionDigits="2" value="${credit.JCCredit}"/>
+                            旧存置信度: [${JCCredit}]
+                        </label>
+                    </c:otherwise>
+                </c:choose>
+            </h3>
+
             <div class="line-5"></div>
             <div class="table-1" style="margin:10px 10px 20px 15px;">
                 <table id="dytable" class="center">

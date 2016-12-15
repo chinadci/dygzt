@@ -1,13 +1,10 @@
 package software.dygzt.service.share;
 
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
+import software.dygzt.data.share.dataobject.SjjzBdDO;
 import software.dygzt.data.user.dataobject.XtglYhbDO;
-import software.dygzt.service.aj.model.AjjbModel;
 import software.dygzt.service.ajlx.model.AjlxVO;
 import software.dygzt.service.bm.model.BmModel;
 import software.dygzt.service.dmb.model.DmVO;
@@ -16,7 +13,6 @@ import software.dygzt.service.manualResearch.model.ManualHistoryVO;
 import software.dygzt.service.manualResearch.model.ManualModel;
 import software.dygzt.service.manualResearch.model.ManualVO;
 import software.dygzt.service.research.model.BbscTemplateVO;
-import software.dygzt.service.research.model.ResearchAj;
 import software.dygzt.service.research.model.ResearchTable;
 import software.dygzt.service.research.model.ResearchTableCell;
 import software.dygzt.service.research.model.ResearchTableCellVO;
@@ -27,12 +23,11 @@ import software.dygzt.service.research.model.ResearchTableVO;
 import software.dygzt.service.research.model.ResearchXXBModel;
 import software.dygzt.service.research.model.ResearchXXZBModel;
 import software.dygzt.service.share.model.ExcelCell;
-import software.dygzt.service.user.model.BmVO;
+import software.dygzt.service.share.model.SjjzBdModel;
 import software.dygzt.service.user.model.DyXtyhVO;
 import software.dygzt.service.user.model.XtglyhModel;
 import software.dygzt.util.DateUtil;
 import software.dygzt.util.StringUtil;
-import software.dygzt.data.aj.dataobject.AjjbDO;
 import software.dygzt.data.ajlx.dataobject.AjlxbDO;
 import software.dygzt.data.bbsc.dataobject.BbscTemplateDO;
 import software.dygzt.data.bm.dataobject.JzrhBmbDO;
@@ -398,6 +393,38 @@ public class Convertor {
         bmModel.setFybh(bmDmb.getFybh() == null ? -1 : bmDmb.getFybh());
         bmModel.setBmbh(bmDmb.getDmbh());
         return bmModel;
+    }
+
+
+    public static SjjzBdModel doToSjjzBdModel(SjjzBdDO sjjzBdDO){
+        if(sjjzBdDO != null){
+            SjjzBdModel sjjzBdModel = new SjjzBdModel();
+            String kssj = String.valueOf(sjjzBdDO.getKsNd())+"-"+String.valueOf(sjjzBdDO.getKsYf())+"-"+String.valueOf(sjjzBdDO.getKsTs());
+            String jssj = String.valueOf(sjjzBdDO.getJsNd())+"-"+String.valueOf(sjjzBdDO.getJsYf())+"-"+String.valueOf(sjjzBdDO.getJsTs());
+
+            sjjzBdModel.setKssj(kssj);
+            sjjzBdModel.setJssj(jssj);
+
+            sjjzBdModel.setJzrhJc(sjjzBdDO.getJzrhJc());
+            sjjzBdModel.setJzrhWj(sjjzBdDO.getJzrhWj());
+            sjjzBdModel.setJzrhXs(sjjzBdDO.getJzrhXs());
+            sjjzBdModel.setJzrhYj(sjjzBdDO.getJzrhYj());
+
+            sjjzBdModel.setBdJc(sjjzBdDO.getBdJc());
+            sjjzBdModel.setBdWj(sjjzBdDO.getBdWj());
+            sjjzBdModel.setBdXs(sjjzBdDO.getBdXs());
+            sjjzBdModel.setBdYj(sjjzBdDO.getBdYj());
+
+            sjjzBdModel.setCyJc(sjjzBdDO.getCyJc());
+            sjjzBdModel.setCyWj(sjjzBdDO.getCyWj());
+            sjjzBdModel.setCyXs(sjjzBdDO.getCyXs());
+            sjjzBdModel.setCyYj(sjjzBdDO.getCyYj());
+            return sjjzBdModel;
+        }else{
+            return null;//如果传过来的是空，则返回空
+        }
+
+
     }
 
     public static BmModel doToBmModel(JzrhBmbDO bmDmb) {

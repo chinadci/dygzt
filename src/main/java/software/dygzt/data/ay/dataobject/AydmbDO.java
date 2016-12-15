@@ -1,11 +1,7 @@
 package software.dygzt.data.ay.dataobject;
 
+import javax.persistence.*;
 import java.util.Date;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.IdClass;
-import javax.persistence.Table;
 
 /**
  * AydmbDO entity. @author MyEclipse Persistence Tools
