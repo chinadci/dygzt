@@ -20,53 +20,67 @@
 
     <h3>
         <c:choose>
-            <c:when test="${credit.XSCredit} == 0.0">
-                <label class="credit">暂无新收置信度</label>
+            <%--当后台没有置信度的数据的时候，则告知没有计算--%>
+            <c:when test="${credit == null}">
+                <label class="creditNoData">后台暂无该时间段内的置信度数据</label>
             </c:when>
             <c:otherwise>
-                <label class="credit">
-                    <fmt:formatNumber var="XSCredit" type="percent" maxFractionDigits="2" value="${credit.XSCredit}"/>
-                    新收置信度: [${XSCredit}]
-                </label>
-            </c:otherwise>
-        </c:choose>
+                <c:choose>
+                    <c:when test="${credit.XSCredit eq 0}">
+                        <%--<label class="credit">暂未计算新收置信度</label>--%>
+                    </c:when>
+                    <c:otherwise>
+                        <label class="credit">
+                            <fmt:formatNumber var="XSCredit" type="percent" maxFractionDigits="2"
+                                              value="${credit.XSCredit}"/>
+                            新收置信度: [${XSCredit}]
+                        </label>
+                    </c:otherwise>
+                </c:choose>
 
+                <c:choose>
+                    <c:when test="${credit.WJcredit eq 0}">
+                        <%--<label class="credit">暂未计算未结置信度</label>--%>
+                    </c:when>
+                    <c:otherwise>
+                        <label class="credit">
+                            <fmt:formatNumber var="WJcredit" type="percent" maxFractionDigits="2"
+                                              value="${credit.WJcredit}"/>
+                            未结置信度: [${WJcredit}]
+                        </label>
+                    </c:otherwise>
+                </c:choose>
 
-        <c:choose>
-            <c:when test="${credit.WJcredit} == 0.0">
-                <label class="credit">暂无未结置信度</label>
-            </c:when>
-            <c:otherwise>
-                <label class="credit">
-                    <fmt:formatNumber var="WJcredit" type="percent" maxFractionDigits="2" value="${credit.WJcredit}"/>
-                    未结置信度: [${WJcredit}]
-                </label>
+                <c:choose>
+                    <c:when test="${credit.YJCredit eq 0}">
+                        <%--<label class="credit"> 暂未计算已结置信度</label>--%>
+                    </c:when>
+                    <c:otherwise>
+                        <label class="credit">
+                            <fmt:formatNumber var="YJCredit" type="percent" maxFractionDigits="2"
+                                              value="${credit.YJCredit}"/>
+                            已结置信度: [${YJCredit}]
+                        </label>
+                    </c:otherwise>
+                </c:choose>
+                <c:choose>
+                    <c:when test="${credit.JCCredit eq 0}">
+                        <%--<label class="credit">暂未计算旧存信度</label>--%>
+                    </c:when>
+                    <c:otherwise>
+                        <label class="credit">
+                            <fmt:formatNumber var="JCCredit" type="percent" maxFractionDigits="2"
+                                              value="${credit.JCCredit}"/>
+                            旧存置信度: [${JCCredit}]
+                        </label>
+                    </c:otherwise>
+                </c:choose>
             </c:otherwise>
-        </c:choose>
 
-        <c:choose>
-            <c:when test="${credit.YJCredit} == 0.0">
-                <label class="credit"> 暂无已结置信度</label>
-            </c:when>
-            <c:otherwise>
-                <label class="credit">
-                    <fmt:formatNumber var="YJCredit" type="percent" maxFractionDigits="2" value="${credit.YJCredit}"/>
-                    已结置信度: [${YJCredit}]
-                </label>
-            </c:otherwise>
-        </c:choose>
-        <c:choose>
-            <c:when test="${credit.JCCredit} == 0.0">
-                <label class="credit">暂无旧存信度</label>
-            </c:when>
-            <c:otherwise>
-                <label class="credit">
-                    <fmt:formatNumber var="JCCredit" type="percent" maxFractionDigits="2" value="${credit.JCCredit}"/>
-                    旧存置信度: [${JCCredit}]
-                </label>
-            </c:otherwise>
         </c:choose>
     </h3>
+
+    <h3><label class="explian">说明: 中括号的数据为同比数据，如果没有同比数据则代表去年同期该案件数为0</label></h3>
 
     <input type="hidden" name="dytj" id="dytj" value="${table.dytj }"/>
 
@@ -99,21 +113,12 @@
                                 <%--该值的显示方式要判断--%>
                                 <c:choose>
                                     <c:when test="${cell.samePeriodLastYearValue != null}">
-                                        <%--   <label class="samePeriodLastYear" id="samePeriodLastYear">
-                                               [${cell.samePeriodLastYearValue}]
-                                               <c:set var="thisValue" value="${cell.value}" />
-                                               <c:set var="lastValue" value="${cell.samePeriodLastYearValue}" />
-                                               <fmt:formatNumber var="intVar3" type="percent" maxFractionDigits="2"  value="${(thisValue-lastValue)/lastValue}" />
-                                               [${intVar3}]
-                                           </label>
-   --%>
-
-
                                         <label class="samePeriodLastYear" id="samePeriodLastYear">
-                                            [${cell.samePeriodLastYearValue}]
+                                                <%--先不输出去年同期的值，值计算同比，如果需要输出去年同期忠诚，则去掉该注释--%>
+                                                <%--[${cell.samePeriodLastYearValue}]--%>
                                             <c:choose>
-                                                <c:when test="${cell.value == 0 && cell.samePeriodLastYearValue ==0}">
-                                                    <%--如果分子分母都为0那么不出输出同比--%>
+                                                <c:when test="${(cell.value == 0 && cell.samePeriodLastYearValue == 0) || cell.samePeriodLastYearValue ==0}">
+                                                    <%--如果分子分母都为0，或者去年同期为0那么不出输出同比--%>
                                                 </c:when>
                                                 <c:otherwise>
                                                     <c:set var="thisValue" value="${cell.value}"/>
@@ -140,19 +145,12 @@
                                 <%--该值的显示方式要判断--%>
                                 <c:choose>
                                     <c:when test="${cell.samePeriodLastYearValue != null}">
-                                        <%-- <label class="samePeriodLastYear" id="samePeriodLastYear">
-                                             [${cell.samePeriodLastYearValue}]
-                                             <c:set var="thisValue" value="${cell.value}" />
-                                             <c:set var="lastValue" value="${cell.samePeriodLastYearValue}" />
-                                             <fmt:formatNumber var="intVar3" type="percent" maxFractionDigits="2"  value="${(thisValue-lastValue)/lastValue}" />
-                                             [${intVar3}]
-                                         </label>--%>
-
                                         <label class="samePeriodLastYear" id="samePeriodLastYear">
-                                            [${cell.samePeriodLastYearValue}]
+                                                <%--先不输出去年同期的值，值计算同比，如果需要输出去年同期忠诚，则去掉该注释--%>
+                                                <%--[${cell.samePeriodLastYearValue}]--%>
                                             <c:choose>
-                                                <c:when test="${cell.value == 0 && cell.samePeriodLastYearValue ==0}">
-                                                    <%--如果分子分母都为0那么不出输出同比--%>
+                                                <c:when test="${(cell.value == 0 && cell.samePeriodLastYearValue == 0) || cell.samePeriodLastYearValue ==0}">
+                                                <%--如果分子分母都为0那么不出输出同比--%>
                                                 </c:when>
                                                 <c:otherwise>
                                                     <c:set var="thisValue" value="${cell.value}"/>
