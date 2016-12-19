@@ -6,7 +6,7 @@ package software.dygzt.dynamicds;
  */
 public class CustomerContextHolder {
 		
-		private static final ThreadLocal contextHolder = new ThreadLocal();  
+		private static final ThreadLocal contextHolder = new ThreadLocal();
 	      
 	    public static void setCustomerType(String customerType) {  	
 	    	contextHolder.set(customerType);  
@@ -18,5 +18,5 @@ public class CustomerContextHolder {
 	      
 	    public static void clearCustomerType() {  
 	    	contextHolder.remove();  
-	    }  
+	    }
 }

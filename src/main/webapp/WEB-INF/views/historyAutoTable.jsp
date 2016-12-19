@@ -15,7 +15,6 @@
     <%@include file="inc/header.inc.jsp" %>
     <div id="main">
         <div class="mod-content wrap3 autotable">
-            < h3 class="title" style="margin-left:20px">
             <s class="file"></s>${table.bbmc} <input type="hidden" name="bbmc" id="bbmc"
                                                      value="${table.bbmc }">
             <span class="print-hidden btn-group">
@@ -93,7 +92,9 @@
                 </c:choose>
 
             </h3>
-            <h3><label class="explian">说明: 中括号的数据为同比数据，如果没有同比数据则代表去年同期该案件数为0</label></h3>
+            <h3 class="creditH3">
+                <label class="explian2">说明: 中括号的数据为同比数据，如果没有同比数据则代表去年同期该案件数为0</label>
+            </h3>
 
             <div class="line-5"></div>
             <div class="table-1" style="margin:10px 10px 20px 15px;">

@@ -102,8 +102,13 @@ public class XtyhServiceImpl implements XtyhService{
 		return Convertor.do2vo(xtyh);
 	}
 
+	public DyXtyhVO getXtyh(String fydm) {
+		DyXtyhDO xtyh = dyXtyhDao.getXtyh(fydm);
+		return Convertor.do2vo(xtyh);
+	}
+
 	/**
-	 * 获取 PUB_XTGL_YHB 中的用户
+	 * 获取通过用户名称 PUB_XTGL_YHB 中的用户
 	 * */
 	public XtglyhModel getYhByYhm(String yhm) {
 		// TODO Auto-generated method stub
@@ -115,7 +120,6 @@ public class XtyhServiceImpl implements XtyhService{
 			return null;
 		}
 	}
-
 
 
 	/**

@@ -16,32 +16,34 @@ public class XtyhDao extends HibernateDaoSupport {
 	
 	/**
 	 * 在个法院数据库中通过yhdm找用户
-	 * @param value
+	 * @param yhdm
 	 * @return
 	 */
-	public List<XtglYhbDO> findByYhdm(String value) {
+	public List<XtglYhbDO> findByYhdm(String yhdm) {
 		try {
 			String queryString = "from XtglYhbDO as model where model.yhdm = ?";
-			return getHibernateTemplate().find(queryString, value);
+			return getHibernateTemplate().find(queryString, yhdm);
 		} catch (RuntimeException re) {
 			log.error("find by yhdm failed", re);
 			throw re;
 		}
 	}
 	/**
-	 * 在个法院数据库中通过yhmc找用户
+	 * 在个法院数据库中通过yhmc，不是 yhdm 找用户
 	 * @param value
 	 * @return
 	 */
 	public List<XtglYhbDO> findByYhmc(String value) {
 		try {
-			String queryString = "from XtglYhbDO as model where model.yhmc = ?";
+			String queryString = "from XtglYhbDO where yhmc = ?";
 			return getHibernateTemplate().find(queryString, value);
 		} catch (RuntimeException re) {
 			log.error("find by yhdm failed", re);
 			throw re;
 		}
 	}
+
+
 	/**
 	 * 将所有用户按部门分组
 	 * @return

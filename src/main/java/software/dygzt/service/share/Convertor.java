@@ -76,8 +76,6 @@ public class Convertor {
     }
 
 
-
-
     /**
      * XtglYhbDO 转 XtglyhModel
      * */
@@ -86,9 +84,9 @@ public class Convertor {
         if(xtglYhbDO != null){
             xtglyhModel = new XtglyhModel();
             xtglyhModel.setYhmc(xtglYhbDO.getYhmc());
+            xtglyhModel.setFybh(xtglYhbDO.getFybh()); //法院编号
             xtglyhModel.setYhbm(xtglYhbDO.getYhbm());
             xtglyhModel.setYhsf(xtglYhbDO.getYhsf());
-            xtglyhModel.setYhkl(xtglYhbDO.getYhkl());
             return xtglyhModel;
         }
         return null;

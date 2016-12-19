@@ -10,10 +10,11 @@ import software.dygzt.data.share.dataobject.SjjzBdDO;
 
 import java.util.List;
 
-import static com.sun.tools.doclint.Entity.and;
 
 /**
  * Created by Pzy on 12/14/16.
+ * 用户执行度计算 DAO
+ *
  */
 @Repository
 public class SjjzBdDAO extends HibernateDaoSupport {

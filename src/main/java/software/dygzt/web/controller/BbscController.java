@@ -442,6 +442,7 @@ public class BbscController implements InitializingBean {
     public void showMyTemplateList(HttpServletRequest request,
                                    HttpServletResponse response, ModelMap model, DatatablesPagedVO pagedVO) throws IOException {
         UserContextModel user = (UserContextModel) ContextHolder.getUserContext();
+
         List<BbscTemplateDO> dos = researchBaseImpl.myTemplateList(user.getYhmc(), user.getFydm());
         List<BbscTemplateVO> vos = new ArrayList<BbscTemplateVO>();
         for (BbscTemplateDO templatedo : dos) {

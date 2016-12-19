@@ -8,6 +8,7 @@ package software.dygzt.service.user.model;
 
 public class XtglyhModel {
     private String yhdm;
+    private int fybh; //法院编号，和法院代码的区别(两种表示方式)
     private String yhmc;
     private String yhkl;
     private String yhbm;
@@ -16,12 +17,21 @@ public class XtglyhModel {
     public XtglyhModel() {
     }
 
-    public XtglyhModel(String yhdm, String yhmc, String yhkl, String yhbm, String yhsf) {
+    public XtglyhModel(String yhdm, int fybh, String yhmc, String yhkl, String yhbm, String yhsf) {
         this.yhdm = yhdm;
+        this.fybh = fybh;
         this.yhmc = yhmc;
         this.yhkl = yhkl;
         this.yhbm = yhbm;
         this.yhsf = yhsf;
+    }
+
+    public int getFybh() {
+        return fybh;
+    }
+
+    public void setFybh(int fybh) {
+        this.fybh = fybh;
     }
 
     public void setYhdm(String yhdm) {

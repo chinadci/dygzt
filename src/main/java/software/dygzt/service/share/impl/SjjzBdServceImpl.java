@@ -16,6 +16,8 @@ import java.util.List;
 
 /**
  * Created by Pzy on 12/14/16.
+ * 用户置信度计算的 servie 接口实现
+ *
  */
 @Service
 public class SjjzBdServceImpl implements SjjzBdService {

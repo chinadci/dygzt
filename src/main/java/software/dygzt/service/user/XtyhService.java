@@ -19,6 +19,14 @@ public interface XtyhService {
 	public DyXtyhVO getXtyh(String fydm, String yhm);
 
 	/**
+	 * 根据法院代码得到用户
+	 * @param fydm
+	 * @return
+	 */
+	public DyXtyhVO getXtyh(String fydm);
+
+
+	/**
 	 * 增加用户
 	 * @param vo
 	 * @return

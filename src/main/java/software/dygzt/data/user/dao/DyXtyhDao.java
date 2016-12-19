@@ -68,7 +68,22 @@ public class DyXtyhDao extends HibernateDaoSupport {
 		List<DyXtyhDO> xtyh = getHibernateTemplate().find(hql);
 		return xtyh.isEmpty() ? null : xtyh.get(0);
 	}
-	
+
+
+	/**
+	 * 根据法院代码和用户编号得到系统用户信息（集中库）
+	 *
+	 * @param fydm
+	 *            法院代码
+	 * @return XtyhDO
+	 */
+	public DyXtyhDO getXtyh(String fydm){
+		String hql = "from DyXtyhDO where fydm = '" + fydm + "'";
+		List<DyXtyhDO> xtyh = getHibernateTemplate().find(hql);
+		return xtyh.isEmpty() ? null : xtyh.get(0);
+	}
+
+
 	/**
 	 * 根据法院代码和用户姓名得到系统用户信息（集中库）
 	 * 

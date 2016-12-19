@@ -1,15 +1,14 @@
 package software.dygzt.web.filter;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.apache.log4j.Logger;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
-
 import software.dygzt.dynamicds.CustomerContextHolder;
 import software.dygzt.service.share.model.ContextHolder;
 import software.dygzt.service.user.model.UserContextModel;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 
 
@@ -27,7 +26,7 @@ public class AccessInterceptor extends HandlerInterceptorAdapter {
 		String toLogin = request.getRequestURL().toString();
 		String doName = request.getServletPath();
 		String cannotAccess = toLogin.substring(0,toLogin.length() - doName.length())+ "/login.do";		
-		
+		/*每个从客户端来的请求都会在此处进行预处理，获得用户 http sessions*/
 		UserContextModel user = (UserContextModel) request.getSession().getAttribute(
 				"userContext");
 		ContextHolder.setUserContext(user);
@@ -35,7 +34,11 @@ public class AccessInterceptor extends HandlerInterceptorAdapter {
 		if (user != null) {
 			return true;
 		}else{
-			if (requestURI.endsWith("/login2.do")||requestURI.endsWith("/login.do")||requestURI.endsWith("/browser.do")||requestURI.endsWith("xzfy.aj")) {
+            /*gateway.do 为信任登录  testgateway 为测试信任登录*/
+			if (requestURI.endsWith("/login2.do")||requestURI.endsWith("/login.do")
+                    ||requestURI.indexOf("gateway.do") >= 0
+                    ||requestURI.endsWith("/browser.do")
+                    ||requestURI.endsWith("xzfy.aj") ) {
 				return true;
 			} else {
 				log.warn("登陆失效。requestURI:" + requestURI);
@@ -49,7 +52,7 @@ public class AccessInterceptor extends HandlerInterceptorAdapter {
 			HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView)
 			throws Exception {
 		String requestURI = request.getRequestURI();
-		if (requestURI.endsWith(".do")){	//不是.aj,.aj没有modelAndView
+		if (requestURI.endsWith(".do")){	//不是.aj,.aj 只做局部刷新，不需要这些数据
 			UserContextModel user = (UserContextModel)request.getSession().getAttribute("userContext");
 			if (user != null) {
 				modelAndView.addObject("yhxx" , user);

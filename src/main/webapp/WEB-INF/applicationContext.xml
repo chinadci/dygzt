@@ -1,106 +1,106 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
 
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-	xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd   
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.1.xsd   
        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.1.xsd   
        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd     
       "
-	default-lazy-init="true" default-autowire="byName"
-	xmlns:util="http://www.springframework.org/schema/util">
+       default-lazy-init="true" default-autowire="byName"
+       xmlns:util="http://www.springframework.org/schema/util">
 
-	<bean id="propertyConfigurer"
-		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-		<property name="locations">
-			<list>
-				<value>WEB-INF/jdbc.properties</value>
-			</list>
-		</property>
-	</bean>
-	<bean id="dataSource" class="software.dygzt.dynamicds.DynamicDataSource">
-		<property name="targetDataSources">
-			<map key-type="java.lang.String">
-				<entry key="Default" value-ref="currentDataSource" />
-				<entry key="Tjgyxfk" value-ref="xfkDataSource" />
-				<entry key="Tjgyjzk" value-ref="jzkDataSource" />
-				<entry key="Tjyzy" value-ref="tjyzyDataSource" />
-				<entry key="Tjgy" value-ref="tjgyDataSource" />
-				<entry key="Tjezy" value-ref="tjezyDataSource" />
-				<entry key="Tjhpfy" value-ref="tjhpfyDataSource" />
-				<entry key="Tjnkfy" value-ref="tjnkfyDataSource" />
-				<entry key="Tjhbfy" value-ref="tjhbfyDataSource" />
-				<entry key="Tjhqfy" value-ref="tjhqfyDataSource" />
-				<entry key="Tjxqfy" value-ref="tjxqfyDataSource" />
-				<entry key="Tjbcfy" value-ref="tjbcfyDataSource" />
-				<entry key="Tjhdfy" value-ref="tjhdfyDataSource" />
-				<entry key="Tjhxfy" value-ref="tjhxfyDataSource" />
-				<entry key="Tjtgfy" value-ref="tjtgfyDataSource" />
-				<entry key="Tjhgfy" value-ref="tjhgfyDataSource" />
-				<entry key="Tjdgfy" value-ref="tjdgfyDataSource" />
-				<entry key="Tjdlfy" value-ref="tjdlfyDataSource" />
-				<entry key="Tjjnfy" value-ref="tjjnfyDataSource" />
-				<entry key="Tjnhfy" value-ref="tjnhfyDataSource" />
-				<entry key="Tjwqfy" value-ref="tjwqfyDataSource" />
-				<entry key="Tjjhfy" value-ref="tjjhfyDataSource" />
-				<entry key="Tjbdfy" value-ref="tjbdfyDataSource" />
-				<entry key="Tjjxfy" value-ref="tjjxfyDataSource" />
-				<entry key="Tjkfqfy" value-ref="tjkfqfyDataSource" />
-				<entry key="Tjhsfy" value-ref="tjhsfyDataSource" />
-				<entry key="Tjbhxqfy" value-ref="tjbhxqfyDataSource" />
-				<entry key="Tjtlfy" value-ref="tjtlfyDataSource" />
-				<entry key="Fyrs" value-ref="fyrsDataSource" />
-				<entry key="Tjgysftj" value-ref="sftjDataSource" />
-				<entry key="Yzjcjzk" value-ref="yzjcjzkDataSource" />
-				<entry key="Tjgyjzrh" value-ref="jzrhDataSource" />
-			</map>
-		</property>
-		<property name="defaultTargetDataSource" ref="currentDataSource" />
-	</bean>
+    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>WEB-INF/jdbc.properties</value>
+            </list>
+        </property>
+    </bean>
+    <bean id="dataSource" class="software.dygzt.dynamicds.DynamicDataSource">
+        <property name="targetDataSources">
+            <map key-type="java.lang.String">
+                <entry key="Default" value-ref="currentDataSource"/>
+                <entry key="Tjgyxfk" value-ref="xfkDataSource"/>
+                <entry key="Tjgyjzk" value-ref="jzkDataSource"/>
+                <entry key="Tjyzy" value-ref="tjyzyDataSource"/>
+                <entry key="Tjgy" value-ref="tjgyDataSource"/>
+                <entry key="Tjezy" value-ref="tjezyDataSource"/>
+                <entry key="Tjhpfy" value-ref="tjhpfyDataSource"/>
+                <entry key="Tjnkfy" value-ref="tjnkfyDataSource"/>
+                <entry key="Tjhbfy" value-ref="tjhbfyDataSource"/>
+                <entry key="Tjhqfy" value-ref="tjhqfyDataSource"/>
+                <entry key="Tjxqfy" value-ref="tjxqfyDataSource"/>
+                <entry key="Tjbcfy" value-ref="tjbcfyDataSource"/>
+                <entry key="Tjhdfy" value-ref="tjhdfyDataSource"/>
+                <entry key="Tjhxfy" value-ref="tjhxfyDataSource"/>
+                <entry key="Tjtgfy" value-ref="tjtgfyDataSource"/>
+                <entry key="Tjhgfy" value-ref="tjhgfyDataSource"/>
+                <entry key="Tjdgfy" value-ref="tjdgfyDataSource"/>
+                <entry key="Tjdlfy" value-ref="tjdlfyDataSource"/>
+                <entry key="Tjjnfy" value-ref="tjjnfyDataSource"/>
+                <entry key="Tjnhfy" value-ref="tjnhfyDataSource"/>
+                <entry key="Tjwqfy" value-ref="tjwqfyDataSource"/>
+                <entry key="Tjjhfy" value-ref="tjjhfyDataSource"/>
+                <entry key="Tjbdfy" value-ref="tjbdfyDataSource"/>
+                <entry key="Tjjxfy" value-ref="tjjxfyDataSource"/>
+                <entry key="Tjkfqfy" value-ref="tjkfqfyDataSource"/>
+                <entry key="Tjhsfy" value-ref="tjhsfyDataSource"/>
+                <entry key="Tjbhxqfy" value-ref="tjbhxqfyDataSource"/>
+                <entry key="Tjtlfy" value-ref="tjtlfyDataSource"/>
+                <entry key="Fyrs" value-ref="fyrsDataSource"/>
+                <entry key="Tjgysftj" value-ref="sftjDataSource"/>
+                <entry key="Yzjcjzk" value-ref="yzjcjzkDataSource"/>
+                <entry key="Tjgyjzrh" value-ref="jzrhDataSource"/>
+            </map>
+        </property>
+        <property name="defaultTargetDataSource" ref="currentDataSource"/>
+    </bean>
 
-	<!--hibernate 注册配置-->
-	<bean id="sessionFactory"
-		class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
-		<property name="dataSource" ref="dataSource" />
-		<property name="hibernateProperties">
-			<value> hibernate.dialect=${hibernate.dialect}
-				hibernate.query.substitutions=true
-				hibernate.show_sql=true
-				hibernate.hbm2ddl.auto=none </value>
-		</property>
-		<property name="packagesToScan" value="software.dygzt.data.*.dataobject">
-		</property>
-	</bean>
+    <!--hibernate 注册配置-->
+    <bean id="sessionFactory"
+          class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="hibernateProperties">
+            <value>hibernate.dialect=${hibernate.dialect}
+                hibernate.query.substitutions=true
+                hibernate.show_sql=true
+                hibernate.hbm2ddl.auto=none
+            </value>
+        </property>
+        <property name="packagesToScan" value="software.dygzt.data.*.dataobject">
+        </property>
+    </bean>
 
-	<bean id="exceptionResolver" class="software.dygzt.exceptions.SystemExceptionResolver">
-		<property name="defaultErrorView" value="error"></property>
-		<property name="exceptionMappings">
-			<props>
-				<prop key="java.lang.Exception">error</prop>
-			</props>
-		</property>
-	</bean>
+    <bean id="exceptionResolver" class="software.dygzt.exceptions.SystemExceptionResolver">
+        <property name="defaultErrorView" value="error"></property>
+        <property name="exceptionMappings">
+            <props>
+                <prop key="java.lang.Exception">error</prop>
+            </props>
+        </property>
+    </bean>
 
-	<!-- 定义本地化处理器 基于session -->
-	<bean id="localeResolver"
-		class="org.springframework.web.servlet.i18n.SessionLocaleResolver" />
+    <!-- 定义本地化处理器 基于session -->
+    <bean id="localeResolver"
+          class="org.springframework.web.servlet.i18n.SessionLocaleResolver"/>
 
-	<!-- 事务处理 -->
-	<tx:annotation-driven transaction-manager="transactionManager" />
-	<bean id="transactionManager"
-		class="org.springframework.orm.hibernate3.HibernateTransactionManager">
-		<property name="sessionFactory" ref="sessionFactory" />
-	</bean>
-	
-	<!-- 文件上传 -->
-	<bean id="multipartResolver"
-		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-		<!-- 设置文件长传最大 -->
-		<property name="maxUploadSize">
-			<value>-1</value>
-		</property>
-	</bean>
-	
+    <!-- 事务处理 -->
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+    <bean id="transactionManager"
+          class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+    <!-- 文件上传 -->
+    <bean id="multipartResolver"
+          class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <!-- 设置文件长传最大 -->
+        <property name="maxUploadSize">
+            <value>-1</value>
+        </property>
+    </bean>
+
 </beans>
 
