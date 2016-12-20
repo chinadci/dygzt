@@ -6,34 +6,34 @@ package software.dygzt.service.share;
 import java.security.SignatureException;
 
 /**
- * Ç©Ãû½Ó¿Ú
+ * ç­¾åæ¥å£
  * @author zym
  *
  */
 public interface Signature {
-	/**
-     * Íâ²¿½Ó¿Ú²ÎÊıÇ©Ãû¡£<p>
-     * 
-     * Ê¹ÓÃprivateKey¶ÔÔ­Ê¼Êı¾İ½øĞĞÇ©Ãû
-     * 
-     * @param content Ô­Ê¼Êı¾İ
-     * @param privateKey Ë½Ô¿
-     * @param charset ±àÂë¼¯
-     * @return Ç©ÃûÊı¾İ
+    /**
+     * å¤–éƒ¨æ¥å£å‚æ•°ç­¾åã€‚<p>
+     *
+     * ä½¿ç”¨privateKeyå¯¹åŸå§‹æ•°æ®è¿›è¡Œç­¾å
+     *
+     * @param content åŸå§‹æ•°æ®
+     * @param privateKey ç§é’¥
+     * @param charset ç¼–ç é›†
+     * @return ç­¾åæ•°æ®
      * @return
-	 * @throws SignatureException 
+     * @throws SignatureException
      */
     public String sign(String content, String privateKey, String charSet) throws SignatureException;
 
     /**
-     * * ÑéÖ¤Ç©Ãû
-     * 
-     * @param content Ô­Ê¼Êı¾İ
-     * @param signature Ç©ÃûÊı¾İ
-     * @param publicKey ¹«Ô¿
-     * @param charset ±àÂë¼¯
-     * @return True Ç©ÃûÑéÖ¤Í¨¹ı False Ç©ÃûÑéÖ¤Ê§°Ü
-     * 
+     * * éªŒè¯ç­¾å
+     *
+     * @param content åŸå§‹æ•°æ®
+     * @param signature ç­¾åæ•°æ®
+     * @param publicKey å…¬é’¥
+     * @param charset ç¼–ç é›†
+     * @return True ç­¾åéªŒè¯é€šè¿‡ False ç­¾åéªŒè¯å¤±è´¥
+     *
      */
     public boolean check(String content, String signature, String publicKey, String charset) throws SignatureException;
 }

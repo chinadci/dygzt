@@ -154,7 +154,6 @@ public class ResearchAyJzrhImpl implements ResearchVariableService {
 
 		//查询获得basecase，baseCase 保存的是符合一定条件的所有 ResearchAj 集合，供后面使用
 		List<ResearchAj>[] baseCase = new List[yjls.length];
-		List<ResearchAj>[] baseCaseSamePeriodLastYear = new List[yjls.length]; //保存的是去年同期的数字
 
 		String curDb = CustomerContextHolder.getCustomerType();		
 		DataSourceRouter.routerToJzrh();

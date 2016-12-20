@@ -49,7 +49,6 @@ public class DygztTrustController {
      * <p>
      * 从其他系统的信任登录传递的参数为
      * fydm=120000 200&yhdm=ydb（用户代码为用户的拼音检查，不是用户名）
-     *
      */
     @RequestMapping(value = "gateway.do", method = RequestMethod.GET)
     public String gateway(HttpServletRequest request,
@@ -58,6 +57,8 @@ public class DygztTrustController {
         String base64Param = request.getParameter("param");
         String signature = request.getParameter("sign");
         String serverPath = request.getParameter("serverPath");
+
+        String requestURL = request.getRequestURL().toString();//请求的 URL
 
 		/*如果验证信息为空的话，跳转到登录界面，并退出*/
         if (StringUtil.isBlank(base64Param) || StringUtil.isBlank(signature)) {
@@ -93,19 +94,26 @@ public class DygztTrustController {
         String[] params = paramStr.split("&");
 
         /*把需要的数据取出来*/
-        //fydm
+        //取fydm
         int start = StringUtil.indexOf(params[0], "=");
         String fydm = params[0].substring(start + 1);
         if (!(fydm.indexOf(" ") >= 0))
             fydm = EscapeUnescape.unescape(fydm);
 
-        //yhm 用户名
+        //取yhm 用户名
         start = StringUtil.indexOf(params[1], "=");
         String yhm = params[1].substring(start + 1);
 
+        //取要登录的系统(type = 1 为调研工作台，type  = 2 为报表定制系统)
+        int type = 1; //默认为调研工作台
+        if (params.length >= 3) {
+            start = StringUtil.indexOf(params[2], "=");
+            type = Integer.valueOf(params[2].substring(start + 1));
+        }
+
         /*doName 请求的服务为可选*/
         String doName = null;
-        if (params.length >= 3) {
+        if (params.length >= 4) {
             start = StringUtil.indexOf(params[2], "=");
             doName = params[2].substring(start + 1);
         }
@@ -122,23 +130,24 @@ public class DygztTrustController {
                 /*把 userContext 的用户名设置为所属的法院名称*/
                 userContext.setYhmc(dyXtyhVO.getName()); //dyXtyhVO 中 Name 对应的中文名
                 userContext.setYhdm(dyXtyhVO.getYhm()); //dyXtyhVO 中 yhm 保存的是拼音简称
-                userContext.setYhqx("调研人;审批人"); //别的系统来的用户，预设权限为调研人和审批人
+                userContext.setYhqx("调研人"); //别的系统来的用户，预设权限为调研人
                 userContext.setFydm(dyXtyhVO.getFydm());
 
                 /*设置 ContextHolder*/
                 request.getSession().setAttribute("userContext", userContext);
                 ContextHolder.setUserContext(userContext);
 
-                //跳转到各角色主界面
+                //信任登录的用户，都跳转到两个系统的默认主界面
                 String yhqx = userContext.getYhqx();
-                if (yhqx.contains("调研人")) {
+                if (type == 1) {
                     doName = "autoresearch.do";
-                } else if (yhqx.contains("审批人")) {
-                    doName = "approve.do";
-                } else if (yhqx.contains("计算人")) {
-                    doName = "compute.do";
-                } else if (yhqx.contains("管理员")) {
-                    doName = "distribute.do";
+                    logger.info("TRUST LOGIN SUCCESS TO DYGZT: requestURL from " + requestURL);
+
+                } else if (type == 2) {
+                    doName = "bbsc.do";
+                    logger.info("TRUST LOGIN SUCCESS TO BBDZ: requestURL from " + requestURL); //BBDZ 为报表定制系统
+                } else {
+                    return "login";
                 }
                 return "redirect:" + doName;
             } else {
@@ -171,16 +180,17 @@ public class DygztTrustController {
                 request.getSession().setAttribute("userContext", userContext);
                 ContextHolder.setUserContext(userContext);
 
-                //跳转到各角色主界面
+                //信任登录的用户，都跳转到两个系统的默认主界面
                 String yhqx = userContext.getYhqx();
-                if (yhqx.contains("调研人")) {
+                if (type == 1) {
                     doName = "autoresearch.do";
-                } else if (yhqx.contains("审批人")) {
-                    doName = "approve.do";
-                } else if (yhqx.contains("计算人")) {
-                    doName = "compute.do";
-                } else if (yhqx.contains("管理员")) {
-                    doName = "distribute.do";
+                    logger.info("TRUST LOGIN SUCCESS TO DYGZT: requestURL from " + requestURL);
+                } else if (type == 2) {
+                    doName = "bbsc.do";
+                    logger.info("TRUST LOGIN SUCCESS TO BBDZ: requestURL from " + requestURL);//BBDZ 为报表定制系统
+
+                } else {
+                    return "login";
                 }
                 return "redirect:" + doName;
             } else {
@@ -204,7 +214,7 @@ public class DygztTrustController {
         if (user != null) {
             String fydm = user.getFydm();
             String yhdm = user.getYhdm();
-            String param = "fydm=" + fydm + "&yhdm=" + yhdm;
+            String param = "fydm=" + fydm + "&yhdm=" + yhdm + "&type=" + 2;
             String sign = "";
             String key = "211bfa7efbcbe28431ceb328969cb15e";
             MD5Signature md5 = new MD5Signature();

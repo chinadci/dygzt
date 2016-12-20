@@ -134,6 +134,8 @@
             <param name="levelMax" value="fatal"/>                                    <!--过滤器设置输出的最高级别为fatal -->
             <param name="AcceptOnMatch" value="true"/>
         </filter>
+        <param name="Encoding" value="UTF-8" />
+        <param name="File" value="all.log" />
     </appender>
 
     <!-- 7、Hibernate日志记录器org.hibernate 日志记录在${web.dygzt.root}/WEB-INF/logs/Thirdpart/Hibernate/目录下 -->
@@ -162,7 +164,10 @@
             <param name="levelMax" value="fatal"/>                                    <!--过滤器设置输出的最高级别为fatal -->
             <param name="AcceptOnMatch" value="true"/>
         </filter>
+        <param name="Encoding" value="UTF-8" />
+        <param name="File" value="all.log" />
     </appender>
+
 
     <!-- 11、apache日志记录器org.apache 日志记录在${web.dygzt.root}/WEB-INF/logs/Thirdpart/apache/目录下 -->
     <logger name="org.apache"

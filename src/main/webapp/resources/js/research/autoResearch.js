@@ -39,6 +39,34 @@ $(function(){
 			}
 		});
 	});
+
+	$("#btn_research_TB").click(function(){
+		var form = $(".researchform");
+		var condition = "";
+		$(".condition").each(function(){
+			var ele = $(this);
+			if(ele.val()&&$.trim(ele.val())){
+				condition += ele.attr("name")+":"+$.trim(ele.val())+";";
+			}
+		});
+		if(condition){
+			condition = condition.substring(0, condition.length-1);
+		}
+		$.ajax({
+			url : "showAutoTableLPSY.aj",
+			type : form.attr('method'),
+			dataType:'html',
+			data : form.serialize()+"&condition="+condition,
+			beforeSend:function(){
+				showMask("数据获取中...");
+			},
+			success : function(html) {
+				hideMask();
+				$(".tableContent").html(html);
+			}
+		});
+	});
+
 	
 	$("#btn_save").click(function(){
 		if($.trim($(".tableContent").html())){

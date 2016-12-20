@@ -83,10 +83,12 @@
                             <a class="btn2" href="javascript:void(0)">时间选择</a>
 					    </span>
                     <span class="formButGroup">
-                            <a id="btn_template" class="btn1" href="javascript:void(0)">保存模板</a>
-                            <a id="btn_bbsc" class="btn1" href="javascript:void(0)">生成报表</a>
-                            <a id="btn_save" class="btn1" href="javascript:void(0)">存入历史</a>
-					    </span>
+                        <a id="btn_bbsc" class="btn1" href="javascript:void(0)">生成报表</a>
+                        <a id="btn_bbsc_TB" class="btn1" href="javascript:void(0)">统计同比</a>
+                        <a id="btn_template" class="btn1" href="javascript:void(0)">保存模板</a>
+                        <a id="btn_save" class="btn1" href="javascript:void(0)">存入历史</a>
+
+                    </span>
                 </div>
             </div>
 

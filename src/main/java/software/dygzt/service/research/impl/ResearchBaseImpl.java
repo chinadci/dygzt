@@ -1,70 +1,35 @@
 package software.dygzt.service.research.impl;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
+import com.googlecode.ehcache.annotations.Cacheable;
+import com.googlecode.ehcache.annotations.TriggersRemove;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-
-import com.googlecode.ehcache.annotations.Cacheable;
-import com.googlecode.ehcache.annotations.TriggersRemove;
-
 import software.dygzt.data.bbsc.dao.BbscTemplateDao;
 import software.dygzt.data.bbsc.dataobject.BbscTemplateDO;
-import software.dygzt.data.research.dao.ResearchCellDao;
-import software.dygzt.data.research.dao.ResearchSavedInfoDao;
-import software.dygzt.data.research.dao.ResearchTableDao;
-import software.dygzt.data.research.dao.ResearchTableDefDao;
-import software.dygzt.data.research.dao.ResearchXXBDao;
-import software.dygzt.data.research.dao.ResearchXXZBDao;
-import software.dygzt.data.research.dao.SqlResultDao;
-import software.dygzt.data.research.dataobject.ResearchCellDO;
-import software.dygzt.data.research.dataobject.ResearchSavedInfoDO;
-import software.dygzt.data.research.dataobject.ResearchTableDO;
-import software.dygzt.data.research.dataobject.ResearchXXBDO;
-import software.dygzt.data.research.dataobject.ResearchTableDefDO;
-import software.dygzt.data.research.dataobject.ResearchXXZBDO;
+import software.dygzt.data.research.dao.*;
+import software.dygzt.data.research.dataobject.*;
 import software.dygzt.dynamicds.CustomerContextHolder;
 import software.dygzt.dynamicds.DataSourceRouter;
 import software.dygzt.dynamicds.FYDataSourceEnum;
 import software.dygzt.service.research.ResearchService;
-import software.dygzt.service.research.model.BbscConditionVO;
-import software.dygzt.service.research.model.ResearchAj;
-import software.dygzt.service.research.model.ResearchAjVO;
-import software.dygzt.service.research.model.ResearchCellCondition;
-import software.dygzt.service.research.model.ResearchConditionVO;
-import software.dygzt.service.research.model.ResearchQueryCondition;
-import software.dygzt.service.research.model.ResearchQueryConditionJzrh;
-import software.dygzt.service.research.model.ResearchQueryConditionSepa;
-import software.dygzt.service.research.model.ResearchQueryResult;
-import software.dygzt.service.research.model.ResearchQueryResultJzrh;
-import software.dygzt.service.research.model.ResearchQueryResultSepa;
-import software.dygzt.service.research.model.ResearchTable;
-import software.dygzt.service.research.model.ResearchTableCell;
-import software.dygzt.service.research.model.ResearchTableColumn;
-import software.dygzt.service.research.model.ResearchTableDefModel;
-import software.dygzt.service.research.model.ResearchTableRow;
-import software.dygzt.service.research.model.ResearchTableVO;
-import software.dygzt.service.research.model.ResearchXXBModel;
-import software.dygzt.service.research.model.ResearchXXZBModel;
-import software.dygzt.service.research.model.SearchConditionVO;
+import software.dygzt.service.research.model.*;
 import software.dygzt.service.share.Convertor;
+import software.dygzt.service.share.SjjzBdService;
 import software.dygzt.service.share.model.ContextHolder;
+import software.dygzt.service.share.model.CreditNumVO;
+import software.dygzt.service.share.model.SjjzBdModel;
 import software.dygzt.service.user.model.UserContextModel;
 import software.dygzt.util.DateUtil;
 import software.dygzt.util.ReflectionUtil;
 import software.dygzt.util.StringUtil;
+
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service("researchBaseImpl")
 public class ResearchBaseImpl implements ResearchService, InitializingBean {
@@ -85,6 +50,9 @@ public class ResearchBaseImpl implements ResearchService, InitializingBean {
     private ResearchSavedInfoDao researchSavedInfoDao;
     @Autowired
     private BbscTemplateDao bbscTemplateDao;
+
+    @Autowired
+    private SjjzBdService sjjzBdServiceImpl;
 
     private Map<String, ResearchXXZBModel> xxzMap = new HashMap<String, ResearchXXZBModel>();
     private Map<String, ResearchXXBModel> xxMap = new HashMap<String, ResearchXXBModel>();
@@ -410,6 +378,19 @@ public class ResearchBaseImpl implements ResearchService, InitializingBean {
         table.setValueList(Convertor.dos2Cellvos(cellDO));
         return table;
     }
+
+    /**
+     * 根据tableid 获取对应的 ResearchTableDO
+     *
+     * */
+    public ResearchTableDO findSavedTableDO(int tableid){
+        ResearchTableDO tableDO = researchTableDao.findById(tableid);
+        if(tableDO != null){
+            return tableDO;
+        }
+        return null;
+    }
+
 
     /**
      * 根据调研条件去 DY_AUTO_TABLE 寻找是否有已生成的表(ok)

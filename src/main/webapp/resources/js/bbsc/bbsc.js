@@ -106,6 +106,36 @@ $(function(){
 			});
 		}
 	});
+
+
+	//报表生成
+	$("#btn_bbsc_TB").click(function(){
+		if(getFormData()){
+			$.ajax({
+				url : "bbscCustomSPLY.aj",//生成报表同时显示同比数据
+				type : "post",
+				dataType:'html',
+				data : {
+					yjCondition:yjCondition,
+					colCondition:colCondition,
+					bbbh: bbbh,
+					bblx:$("#bblx").val(),
+					fyfw:$("#fydm").val(),
+					ksrq:$("#ksrq").val(),
+					jsrq:$("#jsrq").val(),
+				},
+				beforeSend:function(){
+					showMask("数据获取中...");
+				},
+				success : function(html) {
+					hideMask();
+					$(".tableContent").html(html); //把后台生成的 HTML 添加到类为 .tableContent 的地方
+				}
+			});
+		}
+	});
+
+
 	
 	//模板生成
 	$("#btn_template").click(function(){

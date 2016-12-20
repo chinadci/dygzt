@@ -27,6 +27,7 @@
 					</span>
             </h3>
 
+            <div class="line-5"></div>
             <h3 class="creditH3">
 
                 <c:choose>
@@ -34,11 +35,11 @@
                     <c:when test="${credit == null}">
                         <label class="creditNoData">后台暂无该时间段内的置信度数据</label>
                     </c:when>
-                    <c:otherwise>
 
+                    <c:otherwise>
                         <c:choose>
                             <c:when test="${credit.XSCredit eq 0}">
-                                <label class="credit">暂未计算新收置信度</label>
+                                <%--<label class="credit">暂未计算新收置信度</label>--%>
                             </c:when>
                             <c:otherwise>
                                 <label class="credit">
@@ -48,7 +49,6 @@
                                 </label>
                             </c:otherwise>
                         </c:choose>
-
 
                         <c:choose>
                             <c:when test="${credit.WJcredit eq 0}">
@@ -75,8 +75,9 @@
                                 </label>
                             </c:otherwise>
                         </c:choose>
+
                         <c:choose>
-                            <c:when test="${credit.JCCredit} eq 0">
+                            <c:when test="${credit.JCCredit eq 0}">
                                 <%--<label class="credit">暂未计算旧存信度</label>--%>
                             </c:when>
                             <c:otherwise>
@@ -93,10 +94,9 @@
 
             </h3>
             <h3 class="creditH3">
-                <label class="explian2">说明: 中括号的数据为同比数据，如果没有同比数据则代表去年同期该案件数为0</label>
+                <label class="explian2">说明: 中括号的数据为同比数据，如果没有同比数据则代表去年同期该案件数为0，查看历史没有同比数据</label>
             </h3>
 
-            <div class="line-5"></div>
             <div class="table-1" style="margin:10px 10px 20px 15px;">
                 <table id="dytable" class="center">
                     <c:forEach var="i" begin="0" end="${table.collevel-1 }" step="1">
@@ -132,7 +132,7 @@
                                                             <%--[${cell.samePeriodLastYearValue}]--%>
                                                         <c:choose>
                                                             <c:when test="${(cell.value == 0 && cell.samePeriodLastYearValue == 0) || cell.samePeriodLastYearValue ==0}">
-                                                            <%--如果分子分母都为0那么不出输出同比--%>
+                                                                <%--如果分子分母都为0那么不出输出同比--%>
                                                             </c:when>
                                                             <c:otherwise>
                                                                 <c:set var="thisValue" value="${cell.value}"/>
